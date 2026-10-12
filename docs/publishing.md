@@ -64,21 +64,23 @@ The workflow's publish job references `pypi`; GitHub can create a missing enviro
 
 ### Version-tag release flow
 
-`.github/workflows/release.yml` runs when a tag beginning with `v` is pushed. The workflow runs the reusable CI workflow first, then:
+`.github/workflows/release.yml` applies the annotated-tag, exact-commit CI, checksum, OIDC, and artifact-attestation safeguards used by [pillow-rs](https://github.com/appunni-m/pillow-rs/blob/main/.github/workflows/release.yml), adapted to this project's Python wheel and source distribution. It runs when a tag beginning with `v` is pushed. The workflow:
 
-1. Requires the tag to equal `v` plus `[project].version` in `pyproject.toml` (for version `0.1.0`, the tag is `v0.1.0`).
-2. Builds a wheel and source distribution, checks them with `twine check`, and stores the files as workflow artifacts.
-3. Publishes those artifacts to PyPI from the `pypi` environment using `pypa/gh-action-pypi-publish` pinned to verified commit `dc37677b2e1c63e2034f94d8a5b11f265b73ba33` (v1.14.2).
+1. Requires an annotated tag that resolves to the workflow commit and exactly matches `v` plus `[project].version` in `pyproject.toml` (for version `0.1.0`, the tag is `v0.1.0`).
+2. Requires a successful `main` CI run for that exact commit. This includes the Python matrix, quality checks, and Testcontainers end-to-end job.
+3. Builds one wheel and one source distribution, checks them with `twine check`, and stores them with a SHA-256 manifest.
+4. Compares any existing files for that PyPI version by filename and SHA-256. It publishes only missing files, skips identical files on a retry, and stops if PyPI contains a conflicting artifact.
+5. Publishes from the `pypi` environment with `pypa/gh-action-pypi-publish` pinned to verified commit `dc37677b2e1c63e2034f94d8a5b11f265b73ba33` (v1.14.2), then attests the release bundle and creates a GitHub release with the files and checksum manifest.
 
-For a release, first resolve the PyPI name and complete the owner-only setup above. Then update `project.version`, run the local checks, create the matching tag, and push it. The container check requires Docker, so run it locally when Docker is available; the release workflow's CI job runs it in CI.
+For a release, first resolve the PyPI name and complete the owner-only setup above. Then update `project.version`, push the commit to `main`, and wait for its CI run to pass before tagging that same commit. The container check requires Docker, so run it locally when Docker is available; the main-branch CI run covers it in CI.
 
 ```bash
 make check
 make test-e2e
-git tag vX.Y.Z
+git tag -a vX.Y.Z -m "Release vX.Y.Z"
 git push origin vX.Y.Z
 ```
 
-Replace `X.Y.Z` with the exact version in `pyproject.toml`. The pushed tag starts the workflow; monitor the **Release** workflow in GitHub Actions and verify the published files on the project's PyPI page. Treat release tags as immutable: publish a correction with the next version.
+Replace `X.Y.Z` with the exact version in `pyproject.toml`. The annotated tag must point at the commit whose `main` CI passed. The pushed tag starts the workflow; monitor **Release** in GitHub Actions and verify the PyPI files and GitHub release. Treat release tags as immutable: publish a correction with the next version.
 
 Before the first release, push `main`, configure the repository's `pypi` environment, confirm the PyPI project name is available and controlled by this project, and register the matching Trusted Publisher in PyPI. GitHub environment settings require a repository owner or administrator; PyPI publisher setup requires control of the corresponding PyPI project or account.
