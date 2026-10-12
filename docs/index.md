@@ -17,6 +17,6 @@ The intended distribution is `standard`, it imports as `std`, and it provides th
 
 ### Current release foundation
 
-The source package, extras, CLI, tests, benchmark runner, and documentation workflow are implemented. The benchmark records measured results without claiming the original 100× aspiration. PyPI name availability is unconfirmed: the current project page returned 404 during setup, while an indexed PyPI page still lists an older unrelated project. Verify ownership before public installation or release. GitHub Pages still needs its first hosted deployment and owner-side settings.
+The source package, extras, CLI, tests, benchmark runner, and documentation workflow are implemented. The benchmark records measured results without claiming the original 100× aspiration. PyPI name availability is unconfirmed: the current project page returned 404 during setup, while an indexed PyPI page still lists an older unrelated project. Verify ownership before public installation or release. The documentation site is live at [appunni-m.github.io/python-standard](https://appunni-m.github.io/python-standard/); pushes to `main` publish updates through GitHub Actions.
 
 Keep configuration errors and source precedence explicit, keep optional integrations out of the core install, and measure equivalent work before making performance claims.

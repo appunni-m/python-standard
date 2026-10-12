@@ -90,10 +90,10 @@ The skill install command writes `.agents/skills/standard-python/SKILL.md` by de
 | Test and benchmark commands | Unit, parity, Testcontainers consumer, and benchmark workflows are configured; see [testing](testing.md) for local evidence and environment limits |
 | Documentation site | Zensical source and a GitHub Pages workflow are configured |
 | PyPI | Name availability and ownership must be confirmed before public release |
-| Hosted docs | GitHub Pages workflow is configured; first hosted deployment and Pages settings need owner verification |
+| Hosted docs | Live at [appunni-m.github.io/python-standard](https://appunni-m.github.io/python-standard/); pushes to `main` deploy updates |
 | Security reporting | The repository owner still needs to configure a private reporting route |
 
-To prepare an external release, enable GitHub Pages through Actions, confirm control of the `standard` distribution name, and configure private vulnerability reporting. Do not publish under a substitute distribution name without an explicit project decision.
+Before an external release, confirm control of the `standard` distribution name and configure private vulnerability reporting. Do not publish under a substitute distribution name without an explicit project decision.
 
 ## Read the docs
 

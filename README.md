@@ -4,6 +4,8 @@
 
 The project and intended PyPI distribution are named `standard`; the Python import package and command are named `std`. Standard is currently an alpha source checkout. PyPI name ownership is unconfirmed: the project page returned 404 during setup, while an indexed page still lists an older unrelated project. Confirm the name is available and controlled by this project before publishing or recommending a public PyPI install.
 
+The documentation site is live at [appunni-m.github.io/python-standard](https://appunni-m.github.io/python-standard/).
+
 The core provides YAML/TOML configuration, Pydantic Settings sources, immutable snapshots, recursive mapping helpers, and atomic text writes. FastAPI and AWS integrations are optional extras.
 
 ## Install from this checkout

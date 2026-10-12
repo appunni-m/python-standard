@@ -32,4 +32,4 @@ Behavior and project choices recorded below as **Decided** are the working contr
 
 PyPI lists an unrelated [`standard` distribution](https://pypi.org/project/standard/). The requested name cannot be published by this project until it is transferred. Do not substitute a different distribution identifier without user approval.
 
-GitHub Pages deployment requires a repository remote and Pages enabled for that repository. A private security reporting contact also needs to be configured by the repository owner before accepting reports.
+GitHub Pages is enabled for the repository and the documentation site is live at [appunni-m.github.io/python-standard](https://appunni-m.github.io/python-standard/). A private security reporting contact still needs to be configured by the repository owner before accepting reports.

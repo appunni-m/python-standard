@@ -9,19 +9,17 @@ make docs-build
 
 The generated site is written to `site/` and is excluded from Git.
 
-## GitHub Pages setup
+## GitHub Pages deployment
 
 The repository includes `.github/workflows/docs.yml`. It builds the docs with the pinned documentation dependencies and publishes them on pushes to `main` or a manual workflow run.
 
-### First deploy
+### Verified deployment
 
-1. In **Settings → Pages**, select **GitHub Actions** as the build and deployment source. A repository owner must do this once before the workflow can deploy; `configure-pages` fails if Pages is not enabled.
-2. The `main` branch is pushed. After enabling Pages, open **Actions → Documentation** and choose **Run workflow**, or rerun the first failed Documentation run. The workflow builds `site/`, uploads it as a Pages artifact, and deploys it to the `github-pages` environment.
-3. Open the deployment job's environment URL to see the published site.
+The first deployment succeeded in [Documentation run #4](https://github.com/appunni-m/python-standard/actions/runs/38199791257) for commit `41f0b4a` on 2026-10-12. The site is live at [appunni-m.github.io/python-standard](https://appunni-m.github.io/python-standard/). Each push to `main` builds `site/`, uploads it as a Pages artifact, and deploys it to the `github-pages` environment. To deploy manually, open **Actions → Documentation** and choose **Run workflow**.
 
 The workflow grants only `contents: read`, `pages: write`, and `id-token: write`, and uses GitHub's recommended Pages actions. See [GitHub's publishing-source guide](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site), [GitHub's custom-workflow requirements](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages), and [Zensical's GitHub Pages guide](https://zensical.org/docs/publish-your-site/).
 
-The expected Pages URL, `https://appunni-m.github.io/python-standard/`, is configured as `site_url` in `zensical.toml`. Confirm the URL after the first successful deployment and adjust `site_url` if GitHub reports a different address. Zensical recommends this setting for canonical page metadata; instant navigation and instant previews also require it.
+The live Pages URL, `https://appunni-m.github.io/python-standard/`, matches `site_url` in `zensical.toml`. Keep this setting aligned if the repository's Pages domain changes. Zensical recommends this setting for canonical page metadata; instant navigation and instant previews also require it.
 
 ## Resolve the PyPI distribution name
 
