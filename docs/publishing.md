@@ -21,25 +21,23 @@ The workflow grants only `contents: read`, `pages: write`, and `id-token: write`
 
 The live Pages URL, `https://appunni-m.github.io/python-standard/`, matches `site_url` in `zensical.toml`. Keep this setting aligned if the repository's Pages domain changes. Zensical recommends this setting for canonical page metadata; instant navigation and instant previews also require it.
 
-## Resolve the PyPI distribution name
+## Published distribution
 
-The current PyPI project page for `standard` returned 404 in the browser used during setup, while an indexed PyPI page still reports an unrelated `standard 1.0.3` release from 2018. The name's current availability and ownership are therefore unconfirmed. Before publishing, verify the project through the PyPI account that will own it. Do not add a publisher to a project you do not control. Checkout installs such as `python -m pip install '.[fastapi]'` install this repository's wheel and remain available.
+The [PyPI project](https://pypi.org/project/standard/) currently lists release `0.1.0`, one maintainer (`appunni-m`), a source distribution, a universal wheel, and the `fastapi` and `aws` extras. On 2026-10-12, fresh CPython 3.12 environments installed the base package, each extra, and the combined extras from PyPI; imports and CLI checks passed.
 
-PyPI's [Name Retention policy](https://docs.pypi.org/project-management/name-retention/) treats reassignment as a last resort. A project is considered abandoned only when its owner is unreachable, it has had no release in the past twelve months, and its homepage has had no owner activity (or no homepage is listed). Reusing a name for a different project has additional requirements, including documented attempts to contact the owner, evidence that the existing project is not being used, evidence that the proposed project meets the policy's notability criteria, and an explanation of why another name is not an acceptable alternative. Age alone does not establish eligibility.
-
-No owner contact or PyPI name-retention request has been made. If keeping `standard` is essential, first seek an owner-approved transfer; if the owner cannot be reached, gather the policy evidence and follow PyPI's support process. The existing project's reachability, homepage activity, and current usage have not been established, so do not describe it as abandoned. If a transfer is unavailable, get approval for a different distribution name before changing the project metadata.
+The GitHub Release workflow has no runs, the repository has no release tags, and GitHub has no releases. The PyPI release therefore has not been verified through this repository's OIDC workflow. The published 0.1.0 README and `std guide` still contain the old claim that the `standard` name belongs to someone else. Repository version 0.1.1 corrects that text; PyPI will continue serving 0.1.0 until a new release is explicitly published.
 
 ## Configure PyPI Trusted Publishing
 
-The release workflow is present at `.github/workflows/release.yml`. It uses PyPI Trusted Publishing through GitHub's OIDC identity, so the publishing job does not need a long-lived `PYPI_TOKEN` secret. A hosted release run has not been verified.
+The release workflow is present at `.github/workflows/release.yml`. It uses PyPI Trusted Publishing through GitHub's OIDC identity, so the publishing job does not need a long-lived `PYPI_TOKEN` secret. The owner reports that the publisher is configured, but no Release workflow run has verified the OIDC exchange yet.
 
 ### Publisher fields
 
-When the distribution name is available to this project, configure a GitHub Actions publisher whose values exactly match the workflow identity:
+For the existing `standard` project, configure a GitHub Actions publisher whose values exactly match the workflow identity:
 
 | PyPI or GitHub field | Value |
 | --- | --- |
-| PyPI project name | `standard` (use only after confirming the name is available and owned by this project) |
+| PyPI project name | `standard` |
 | Publisher | GitHub Actions |
 | Owner | `appunni-m` |
 | Repository | `python-standard` |
@@ -48,7 +46,7 @@ When the distribution name is available to this project, configure a GitHub Acti
 
 PyPI matches the owner, repository, workflow filename, and optional environment against the GitHub Actions identity. The publisher form asks for the workflow filename, not the `.github/workflows/` path. See PyPI's [publisher setup guide](https://docs.pypi.org/trusted-publishers/adding-a-publisher/).
 
-If a `standard` project already exists under the owner's account, add the publisher from that project's **Publishing** page. If the name is available, create a pending publisher from the PyPI account's **Publishing** page. If it belongs to someone else, obtain an approved transfer or choose another distribution name first. PyPI says a pending publisher does not reserve a name before first publication ([pending publisher guide](https://docs.pypi.org/trusted-publishers/creating-a-project-through-oidc/)).
+The `standard` project already exists and lists `appunni-m` as its maintainer. Configure or verify the publisher through that project's **Publishing** page. Do not create a pending publisher for a name that already has a project.
 
 ### GitHub environment setup
 
@@ -64,13 +62,13 @@ The workflow's publish job references `pypi`; GitHub can create a missing enviro
 
 `.github/workflows/release.yml` applies the annotated-tag, exact-commit CI, checksum, OIDC, and artifact-attestation safeguards used by [pillow-rs](https://github.com/appunni-m/pillow-rs/blob/main/.github/workflows/release.yml), adapted to this project's Python wheel and source distribution. It runs when a tag beginning with `v` is pushed. The workflow:
 
-1. Requires an annotated tag that resolves to the workflow commit and exactly matches `v` plus `[project].version` in `pyproject.toml` (for version `0.1.0`, the tag is `v0.1.0`).
+1. Requires an annotated tag that resolves to the workflow commit and exactly matches `v` plus `[project].version` in `pyproject.toml` (the repository is now version `0.1.1`, so its tag is `v0.1.1`).
 2. Requires a successful `main` CI run for that exact commit. This includes the Python matrix, quality checks, and Testcontainers end-to-end job.
 3. Builds one wheel and one source distribution, checks them with `twine check`, and stores them with a SHA-256 manifest.
 4. Compares any existing files for that PyPI version by filename and SHA-256. It publishes only missing files, skips identical files on a retry, and stops if PyPI contains a conflicting artifact.
 5. Publishes from the `pypi` environment with `pypa/gh-action-pypi-publish` pinned to verified commit `dc37677b2e1c63e2034f94d8a5b11f265b73ba33` (v1.14.2), then attests the release bundle and creates a GitHub release with the files and checksum manifest.
 
-For a release, first resolve the PyPI name and complete the owner-only setup above. Then update `project.version`, push the commit to `main`, and wait for its CI run to pass before tagging that same commit. The container check requires Docker, so run it locally when Docker is available; the main-branch CI run covers it in CI.
+For a release, complete the owner-only setup above, update `project.version`, push the commit to `main`, and wait for its CI run to pass before tagging that same commit. The container check requires Docker, so run it locally when Docker is available; the main-branch CI run covers it in CI.
 
 ```bash
 make check
@@ -81,4 +79,4 @@ git push origin vX.Y.Z
 
 Replace `X.Y.Z` with the exact version in `pyproject.toml`. The annotated tag must point at the commit whose `main` CI passed. The pushed tag starts the workflow; monitor **Release** in GitHub Actions and verify the PyPI files and GitHub release. Treat release tags as immutable: publish a correction with the next version.
 
-Before the first release, push `main`, configure the repository's `pypi` environment, confirm the PyPI project name is available and controlled by this project, and register the matching Trusted Publisher in PyPI. GitHub environment settings require a repository owner or administrator; PyPI publisher setup requires control of the corresponding PyPI project or account.
+Before the next automated release, push `main`, configure the repository's `pypi` environment, and verify the matching Trusted Publisher in PyPI. GitHub environment settings require a repository owner or administrator; PyPI publisher setup requires control of the corresponding PyPI project or account. The current release workflow has not run, so the OIDC publishing path still needs verification.

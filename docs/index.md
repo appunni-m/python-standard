@@ -17,6 +17,6 @@ The intended distribution is `standard`, it imports as `std`, and it provides th
 
 ### Current release foundation
 
-The source package, extras, CLI, tests, benchmark runner, and documentation workflow are implemented. The benchmark records measured results without claiming the original 100× aspiration. PyPI name availability is unconfirmed: the current project page returned 404 during setup, while an indexed PyPI page still lists an older unrelated project. Verify ownership before public installation or release. The documentation site is live at [appunni-m.github.io/python-standard](https://appunni-m.github.io/python-standard/); pushes to `main` publish updates through GitHub Actions.
+The `standard` distribution is published on PyPI, and fresh installs of the core package and each extra have been verified. Version 0.1.0 still contains outdated name-availability guidance in its CLI text; the repository correction is prepared as 0.1.1. The GitHub Release workflow has no runs or tags yet, so automated publishing remains unverified. The benchmark records measured results without claiming the original 100× aspiration. The documentation site is live at [appunni-m.github.io/python-standard](https://appunni-m.github.io/python-standard/); pushes to `main` publish updates through GitHub Actions.
 
 Keep configuration errors and source precedence explicit, keep optional integrations out of the core install, and measure equivalent work before making performance claims.

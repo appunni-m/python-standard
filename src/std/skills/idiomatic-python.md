@@ -31,8 +31,9 @@ Use this skill when creating or changing Python code in a project that uses Stan
 - Use `reload()` only when configuration should be explicitly refreshed. A failed reload leaves the previous snapshot active.
 - Use `std.collections.deep_merge` for the documented recursive mapping, list-append, and later-value-wins behavior.
 - Use `std.files.atomic_write_text` when a complete text replacement must be visible atomically. Its default mode is owner-only.
-- The intended FastAPI distribution form is `standard[fastapi]`; PyPI name ownership is unconfirmed. From this checkout, install with `pip install -e '.[fastapi]'` before importing `std.fastapi`. Confirm the distribution is available and controlled by this project before recommending a public PyPI install.
-- The intended AWS distribution form is `standard[aws]`; from this checkout, install with `pip install -e '.[aws]'` before importing `std.aws`. Pass a configured client when the application owns AWS client lifecycle.
+- Install the published FastAPI integration with `python -m pip install 'standard[fastapi]'` before importing `std.fastapi`. From a source checkout, use `python -m pip install -e '.[fastapi]'`.
+- Install the published AWS integration with `python -m pip install 'standard[aws]'` before importing `std.aws`. From a source checkout, use `python -m pip install -e '.[aws]'`. Pass a configured client when the application owns AWS client lifecycle.
+- To install both integrations, use `python -m pip install 'standard[fastapi,aws]'` or, from a checkout, `python -m pip install -e '.[fastapi,aws]'`.
 
 ## Tests and docs
 

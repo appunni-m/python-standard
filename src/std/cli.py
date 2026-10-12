@@ -16,14 +16,17 @@ _DISTRIBUTION_NAME = "standard"
 
 _GUIDE = """Standard targets the `standard` distribution and is imported as `std`.
 
+Install the core package with `python -m pip install standard`. Optional
+integrations are available with `python -m pip install 'standard[fastapi]'`,
+`python -m pip install 'standard[aws]'`, or both with
+`python -m pip install 'standard[fastapi,aws]'`.
+
 Use `std.config.ConfigManager` for YAML/TOML configuration and Pydantic Settings
 sources. Snapshots are immutable; call `to_dict()` for an isolated mutable copy.
 `reload()` is explicit and atomic. Core helpers are `std.collections` and
-`std.files`. FastAPI and AWS adapters are optional: install
-`standard[fastapi]` or `standard[aws]` before importing `std.fastapi` or
-`std.aws`. The existing PyPI project named `standard` is unrelated; until the
-name is resolved, install extras from this checkout with `pip install -e '.[fastapi]'`
-or `pip install -e '.[aws]'`.
+`std.files`. FastAPI and AWS adapters are optional; install their extra before
+importing `std.fastapi` or `std.aws`. From a source checkout, use the matching
+editable install form such as `python -m pip install -e '.[fastapi]'`.
 
 Run `std skill show` to print the portable idiomatic-Python skill. Run
 `std skill install` to copy it to `.agents/skills/standard-python/SKILL.md`.

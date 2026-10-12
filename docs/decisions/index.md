@@ -20,7 +20,7 @@ Behavior and project choices recorded below as **Decided** are the working contr
 | Error handling | Use consistent source-aware public errors without exposing source or environment values |
 | Optional integration style | Keep heavier integrations optional; intended install forms are `standard[fastapi]` and `standard[aws]` |
 | Documentation hosting target | GitHub Pages, through GitHub Actions |
-| Distribution name | `standard`; the product remains Standard, the import package is `std`, and the CLI is `std`. PyPI's current `standard` project is unrelated; resolve ownership before publishing. |
+| Distribution name | `standard`, published on PyPI; the product remains Standard, the import package is `std`, and the CLI is `std`. |
 | Python support | CPython 3.11–3.14 |
 | License | MIT |
 | Base runtime dependencies | PyYAML 6.x and pydantic-settings 2.x; TOML uses `tomllib` |
@@ -30,6 +30,6 @@ Behavior and project choices recorded below as **Decided** are the working contr
 
 ## Remaining external setup
 
-PyPI lists an unrelated [`standard` distribution](https://pypi.org/project/standard/). The requested name cannot be published by this project until it is transferred. Do not substitute a different distribution identifier without user approval.
+The current PyPI [`standard` project](https://pypi.org/project/standard/) lists maintainer `appunni-m` and release 0.1.0. Clean-environment installation checks for the base package and optional extras passed on 2026-10-12. The GitHub Release workflow has not run yet; its OIDC publisher path remains unverified.
 
-GitHub Pages is enabled for the repository and the documentation site is live at [appunni-m.github.io/python-standard](https://appunni-m.github.io/python-standard/). A private security reporting contact still needs to be configured by the repository owner before accepting reports.
+GitHub Pages is enabled for the repository and the documentation site is live at [appunni-m.github.io/python-standard](https://appunni-m.github.io/python-standard/). A private security reporting contact still needs to be configured by the repository owner.

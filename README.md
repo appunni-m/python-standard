@@ -2,9 +2,16 @@
 
 **A small Python utility library with predictable behavior and agent-first guidance.**
 
-The project and intended PyPI distribution are named `standard`; the Python import package and command are named `std`. Standard is currently an alpha source checkout. PyPI name ownership is unconfirmed: the project page returned 404 during setup, while an indexed page still lists an older unrelated project. Confirm the name is available and controlled by this project before publishing or recommending a public PyPI install.
+The project and PyPI distribution are named `standard`; the Python import package and command are named `std`. Standard is an alpha Python library published on [PyPI](https://pypi.org/project/standard/). The documentation site is live at [appunni-m.github.io/python-standard](https://appunni-m.github.io/python-standard/).
 
-The documentation site is live at [appunni-m.github.io/python-standard](https://appunni-m.github.io/python-standard/).
+## Install from PyPI
+
+```bash
+python -m pip install standard
+python -m pip install 'standard[fastapi]'
+python -m pip install 'standard[aws]'
+python -m pip install 'standard[fastapi,aws]'
+```
 
 The core provides YAML/TOML configuration, Pydantic Settings sources, immutable snapshots, recursive mapping helpers, and atomic text writes. FastAPI and AWS integrations are optional extras.
 
@@ -18,8 +25,6 @@ Run these commands from the repository root. Choose one integration command if y
 | FastAPI | `python -m pip install -e '.[fastapi]'` | `std.fastapi` |
 | AWS | `python -m pip install -e '.[aws]'` | `std.aws` |
 | Both integrations | `python -m pip install -e '.[fastapi,aws]'` | `std.fastapi`, `std.aws` |
-
-The intended published install forms are `standard`, `standard[fastapi]`, and `standard[aws]`. They are not available for this project until the existing PyPI name is resolved.
 
 ## First use
 

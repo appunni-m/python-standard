@@ -20,7 +20,7 @@ The package metadata keeps each runtime integration independent. The Testcontain
 | `standard[aws]` | `.[aws]` | boto3 |
 | `standard[fastapi,aws]` | `.[fastapi,aws]` | FastAPI and boto3 |
 
-PyPI name ownership is unconfirmed: the project page returned 404 during setup, while an indexed page still lists an older unrelated project. The test matrix validates this checkout's distribution metadata and extras; confirm name availability and ownership before public installation under `standard[...]`.
+The published [`standard` project](https://pypi.org/project/standard/) lists maintainer `appunni-m` and version 0.1.0. On 2026-10-12, fresh CPython 3.12 virtual environments installed the base package, `standard[fastapi]`, `standard[aws]`, and `standard[fastapi,aws]` from PyPI; imports for `std`, `std.fastapi`, and `std.aws` passed. The combined environment also passed `pip check` and the `std` CLI/skill commands.
 
 ## Layers
 
@@ -49,7 +49,7 @@ tox run -e e2e
 
 ## Verification status and release gates
 
-As of 2026-10-12, `make check` passed the 48 non-container tests on local CPython 3.12.11 with 94% total coverage, plus Ruff formatting/lint, strict mypy, and the docs build. A separate Testcontainers run passed all four clean-wheel consumer cases with the Rancher-compatible local settings above. Local CPython 3.11, 3.13, and 3.14 interpreters were unavailable and tox reported those environments as skipped. The CI workflow explicitly selects CPython 3.11–3.14 and requires Docker, but no hosted result exists until the repository is connected and pushed.
+As of 2026-10-12, hosted [CI run #7](https://github.com/appunni-m/python-standard/actions/runs/38199936537) passed the quality job, the Testcontainers consumer job, and the CPython 3.11–3.14 matrix on commit `b4598cc`. The separate public PyPI install checks above verified the published wheel and extras. The GitHub Release workflow has no runs yet, so its OIDC publication path is not verified.
 
 The configured release checks cover:
 

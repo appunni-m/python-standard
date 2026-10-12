@@ -11,7 +11,7 @@
 | `std.fastapi` | `fastapi` extra | FastAPI dependency for a Pydantic Settings model |
 | `std.aws` | `aws` extra | AWS Secrets Manager loader and Pydantic source |
 
-The checkout can install its extras with `python -m pip install -e '.[fastapi]'` or `python -m pip install -e '.[aws]'`. Confirm the current availability and ownership of the public PyPI name `standard` before publishing; see [getting started](get-started.md#current-status).
+Install the public integrations with `python -m pip install 'standard[fastapi]'` or `python -m pip install 'standard[aws]'`. From a checkout, use `python -m pip install -e '.[fastapi]'` or `python -m pip install -e '.[aws]'`. The current distribution is available at [PyPI](https://pypi.org/project/standard/); see [getting started](get-started.md#current-status) for verification status.
 
 ## Configuration
 

@@ -18,7 +18,7 @@ This survey identifies useful approaches to study. It does not rank the projects
 - Match the reference package's documented feature set; differentiate through clear semantics, edge-case correctness, and measured performance.
 - Performance comparisons must use the same config shape, precedence, interpolation, validation, and output guarantees.
 - The requested `pydantic-settings-extra-sources` package is the compatibility reference, not a dependency. Its exact source archive has been inspected; the adopted behavior and edge-case decisions are summarized in the [configuration contract](index.md).
-- PyPI name ownership needs a current check before publication. The project page returned 404 during setup, while an indexed page still lists an older unrelated `standard` project. The local metadata targets the requested name; do not publish until the owner confirms that the name is available or transferred.
+- PyPI now lists `standard` 0.1.0 under maintainer `appunni-m`; fresh installs of the base package and all extras passed on 2026-10-12. See [publishing](../publishing.md) for the current release-workflow status.
 
 ## Closer look at the provided 0.1.0 source archive
 
