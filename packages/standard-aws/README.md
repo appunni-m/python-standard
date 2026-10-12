@@ -74,12 +74,14 @@ For a continuously polling service, use the lifecycle-aware consumer:
 ```python
 from std.aws import SQSConsumer
 
+
 async def handle(message):
     print(message["Body"])
 
+
 consumer = SQSConsumer(queue_url="https://…", region="us-east-1", handler=handle)
 await consumer.start()  # starts its managed worker and returns
-await consumer.stop()   # signals graceful shutdown and waits for completion
+await consumer.stop()  # signals graceful shutdown and waits for completion
 ```
 
 `SQSConsumer` is a `std.service.BackgroundService`, so its state and health can
@@ -91,9 +93,11 @@ be managed alongside application services.
 from pydantic import BaseModel
 from std.aws import DynamoDBConfig, DynamoTable
 
+
 class Task(BaseModel):
     task_id: str
     title: str
+
 
 tasks = DynamoTable(DynamoDBConfig(table_name="tasks"), Task)
 await tasks.put_item(Task(task_id="task-123", title="Build docs"))

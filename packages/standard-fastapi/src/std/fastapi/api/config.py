@@ -2,12 +2,12 @@
 
 from __future__ import annotations
 
-from enum import Enum
+from enum import StrEnum
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
-class Environment(str, Enum):
+class Environment(StrEnum):
     """Deployment environments supported by the FastAPI setup helper."""
 
     DEV = "dev"

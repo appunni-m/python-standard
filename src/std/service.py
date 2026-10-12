@@ -6,14 +6,14 @@ import asyncio
 import logging
 import math
 from abc import ABC, abstractmethod
-from enum import Enum
+from enum import StrEnum
 from types import TracebackType
 from typing import Protocol, runtime_checkable
 
 logger = logging.getLogger(__name__)
 
 
-class ServiceState(str, Enum):
+class ServiceState(StrEnum):
     """Lifecycle states shared by service implementations."""
 
     IDLE = "idle"

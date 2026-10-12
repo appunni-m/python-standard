@@ -18,9 +18,11 @@ from std.cache import RedisClient, RedisConfig, cached
 cache = RedisClient(RedisConfig(host="localhost", key_prefix="shop:"))
 await cache.connect()
 
+
 @cached(cache, ttl=300)
 async def get_product(product_id: int) -> dict[str, str]:
     return await load_product(product_id)
+
 
 try:
     product = await get_product(42)

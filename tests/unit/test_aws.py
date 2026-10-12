@@ -954,8 +954,8 @@ def test_s3_file_lifecycle_json_model_and_object_operations(
         await s3.delete_object("plain.txt")
         assert client.calls[-1][0] == "delete_object"
 
-        client.responses["generate_presigned_url"] = (
-            lambda *_args, **kwargs: f"https://example.test/{kwargs['HttpMethod']}"
+        client.responses["generate_presigned_url"] = lambda *_args, **kwargs: (
+            f"https://example.test/{kwargs['HttpMethod']}"
         )
         assert (
             await s3.get_presigned_url("plain.txt", http_method="put") == "https://example.test/PUT"
