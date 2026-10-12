@@ -14,9 +14,9 @@ python -m pip install 'standard[rdbms]'
 python -m pip install 'standard[fastapi,aws,http,cache,rdbms]'
 ```
 
-These provider extras are part of the repository's 0.2.0 development layout.
+These provider extras are part of the unreleased shared `v0.2.0` release train.
 The published `standard` 0.1.1 does not yet include them; use the local package
-install commands below until the add-on releases are published.
+install commands below until all six matching distributions are published.
 
 ## Install from this checkout
 
@@ -39,7 +39,7 @@ On Windows, activate the environment with `.venv\Scripts\activate` instead. Inst
 | Relational databases | `python -m pip install -e . -e packages/standard-rdbms` |
 | All providers | `python -m pip install -e . -e packages/standard-fastapi -e packages/standard-aws -e packages/standard-http -e packages/standard-cache -e packages/standard-rdbms` |
 
-These commands install this checkout in editable mode. The published `standard` 0.1.1 still bundles the FastAPI and AWS modules. In the repository's 0.2.0 layout, the named extras select the standalone distributions; that version and the add-ons are not published yet.
+These commands install this checkout in editable mode. The published `standard` 0.1.1 still bundles the FastAPI and AWS modules. The next coordinated `v0.2.0` release gives each integration its own distribution; it has not been published yet.
 
 ## Load a configuration file
 
@@ -142,11 +142,11 @@ The skill install command writes `.agents/skills/standard-idiomatic-python/SKILL
 | Python versions | CPython 3.11–3.14 are declared and configured in tox and CI |
 | Test and benchmark commands | Unit, parity, Testcontainers consumer, and benchmark workflows are configured; see [testing](testing.md) for local evidence and environment limits |
 | Documentation site | Zensical source and a GitHub Pages workflow are configured |
-| PyPI | `standard` 0.1.1 is published and its old extras passed clean-environment checks; the repository's 0.2.0 split and standalone add-ons are not published yet |
+| PyPI | `standard` 0.1.1 is published and its old extras passed clean-environment checks; the next shared `v0.2.0` release and add-ons are not published yet |
 | Hosted docs | Live at [appunni-m.github.io/python-standard](https://appunni-m.github.io/python-standard/); pushes to `main` deploy updates |
 | Security reporting | GitHub private vulnerability reporting is enabled; use the **Report a vulnerability** button on the [Security Advisories page](https://github.com/appunni-m/python-standard/security/advisories) |
 
-As of 2026-10-12, PyPI serves `standard` 0.1.1, and its annotated tag and GitHub Release completed successfully. The repository version is 0.2.0; its new add-on publishers still need owner setup and release. See the [publishing guide](publishing.md) for exact workflow identities and tag formats.
+As of 2026-10-12, PyPI serves `standard` 0.1.1, and its annotated tag and GitHub Release completed successfully. The next planned deployment is one `v0.2.0` tag covering all six distributions; the five add-on publishers still need owner setup. See the [publishing guide](publishing.md) for the shared workflow identity and tag process.
 
 ## Read the docs
 

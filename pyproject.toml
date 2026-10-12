@@ -1,10 +1,10 @@
 [build-system]
-requires = ["hatchling>=1.27,<2"]
+requires = ["hatchling>=1.27,<2", "hatch-vcs>=0.4,<1"]
 build-backend = "hatchling.build"
 
 [project]
 name = "standard"
-version = "0.2.0"
+dynamic = ["version"]
 description = "A predictable Python utility library with an agent-first interface"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -39,11 +39,11 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-fastapi = ["standard-fastapi>=0.1,<0.2"]
-aws = ["standard-aws>=0.1,<0.2"]
-http = ["standard-http>=0.1,<0.2"]
-cache = ["standard-cache>=0.1,<0.2"]
-rdbms = ["standard-rdbms>=0.1,<0.2"]
+fastapi = ["standard-fastapi>=0.1.1.dev0,<1"]
+aws = ["standard-aws>=0.1.1.dev0,<1"]
+http = ["standard-http>=0.1.1.dev0,<1"]
+cache = ["standard-cache>=0.1.1.dev0,<1"]
+rdbms = ["standard-rdbms>=0.1.1.dev0,<1"]
 
 [project.scripts]
 std = "std.cli:main"
@@ -81,10 +81,17 @@ only-include = [
 ]
 ignore-vcs = false
 
+[tool.hatch.version]
+source = "vcs"
+tag-pattern = "^v(?P<version>\\d+\\.\\d+\\.\\d+(?:(?:a|b|rc)\\d+)?)$"
+
+[tool.hatch.version.raw-options]
+search_parent_directories = true
+
 [tool.pytest.ini_options]
 addopts = "-ra --strict-markers"
 testpaths = ["tests"]
-pythonpath = ["src"]
+pythonpath = ["src", "."]
 markers = [
   "integration: tests that exercise external integration boundaries",
   "e2e: end-to-end tests that require Docker through Testcontainers",
@@ -109,6 +116,7 @@ src = [
   "packages/standard-http/src",
   "packages/standard-cache/src",
   "packages/standard-rdbms/src",
+  "scripts",
   "tests",
 ]
 
@@ -150,7 +158,7 @@ commands = [["python", "-m", "coverage", "run", "-m", "pytest", "-m", "not e2e"]
 package = "skip"
 skip_install = true
 deps = ["ruff>=0.14,<1"]
-commands = [["python", "-m", "ruff", "format", "--check", "src", "packages", "tests", "benchmarks"], ["python", "-m", "ruff", "check", "src", "packages", "tests", "benchmarks"]]
+commands = [["python", "-m", "ruff", "format", "--check", "src", "packages", "scripts", "tests", "benchmarks"], ["python", "-m", "ruff", "check", "src", "packages", "scripts", "tests", "benchmarks"]]
 
 [tool.tox.env.type]
 package = "skip"
@@ -180,6 +188,7 @@ commands = [[
   "packages/standard-http/src/std/http",
   "packages/standard-cache/src/std/cache",
   "packages/standard-rdbms/src/std/rdbms",
+  "scripts/release.py",
 ]]
 
 [tool.tox.env.docs]

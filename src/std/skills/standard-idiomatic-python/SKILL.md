@@ -95,7 +95,7 @@ bounded graceful-shutdown period.
 
 Core provides configuration, `std.logging`, async `Service` lifecycle
 primitives, utility helpers, the `std` CLI, and packaged agent guidance. The
-`std.service` API is part of the repository's 0.2.0 source; check
+`std.service` API is part of the unreleased source; check
 `std guide --format json` and the API reference to confirm what an installed
 release provides.
 

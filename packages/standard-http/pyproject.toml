@@ -1,10 +1,10 @@
 [build-system]
-requires = ["hatchling>=1.27,<2"]
+requires = ["hatchling>=1.27,<2", "hatch-vcs>=0.4,<1"]
 build-backend = "hatchling.build"
 
 [project]
 name = "standard-http"
-version = "0.1.0"
+dynamic = ["version"]
 description = "Async HTTP client and authentication helpers for Standard"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -24,7 +24,7 @@ classifiers = [
   "Programming Language :: Python :: 3.14",
   "Typing :: Typed",
 ]
-dependencies = ["standard>=0.2.0,<0.3", "httpx>=0.27,<1"]
+dependencies = ["standard>=0.1.1.dev0,<1", "httpx>=0.27,<1"]
 urls = { Documentation = "https://appunni-m.github.io/python-standard/http/", Repository = "https://github.com/appunni-m/python-standard" }
 
 [tool.hatch.build.targets.wheel]
@@ -33,3 +33,10 @@ sources = ["src"]
 
 [tool.hatch.build.targets.sdist]
 only-include = ["pyproject.toml", "README.md", "LICENSE", "src/std/http"]
+
+[tool.hatch.version]
+source = "vcs"
+tag-pattern = "^v(?P<version>\\d+\\.\\d+\\.\\d+(?:(?:a|b|rc)\\d+)?)$"
+
+[tool.hatch.version.raw-options]
+search_parent_directories = true

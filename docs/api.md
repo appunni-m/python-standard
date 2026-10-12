@@ -18,8 +18,8 @@
 | `std.rdbms` | `standard-rdbms` or `standard[rdbms]` | Async SQLAlchemy database managers for SQLite, PostgreSQL, and MySQL |
 
 The published `standard` 0.1.1 bundles the FastAPI and AWS modules. The
-repository's 0.2.0 layout gives each integration its own distribution; the
-add-ons and their convenience extras are not published yet. From a checkout,
+unreleased source gives each integration its own distribution; the add-ons and
+their convenience extras are not published yet. From a checkout,
 install core plus the relevant `packages/standard-*` project in editable mode.
 See [current release status](index.md#current-release-status) and
 [publishing](publishing.md) for release status. The focused guides cover

@@ -23,7 +23,7 @@ The package metadata keeps each runtime integration independent. The Testcontain
 | `standard[rdbms]` | `-e . -e packages/standard-rdbms` | `standard-rdbms`, SQLAlchemy, and async drivers |
 | `standard[fastapi,aws,http,cache,rdbms]` | Core plus all five local add-on projects | All add-on distributions and their dependencies |
 
-The published [`standard` project](https://pypi.org/project/standard/) is at version 0.1.1. On 2026-10-12, fresh CPython 3.12 virtual environments installed the base package, each existing extra, and both extras from PyPI; imports for `std`, `std.fastapi`, and `std.aws` passed. The combined environment also passed `pip check` and the `std` CLI/skill commands. This verifies the published 0.1.1 artifact, where FastAPI and AWS are bundled. The repository's 0.2.0 split and its five add-on distributions have not been published.
+The published [`standard` project](https://pypi.org/project/standard/) is at version 0.1.1. On 2026-10-12, fresh CPython 3.12 virtual environments installed the base package, each existing extra, and both extras from PyPI; imports for `std`, `std.fastapi`, and `std.aws` passed. The combined environment also passed `pip check` and the `std` CLI/skill commands. This verifies the published 0.1.1 artifact, where FastAPI and AWS are bundled. The unreleased source now derives all six project versions from one shared Git tag; the add-on distributions have not been published.
 
 ## Layers
 

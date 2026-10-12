@@ -39,7 +39,10 @@ def built_wheels(e2e_workspace: Path) -> dict[str, Path]:
             capture_output=True,
             text=True,
         )
-    return {name: next(wheel_dir.glob(f"{name.replace('-', '_')}-*.whl")) for name in projects}
+    wheels = {name: next(wheel_dir.glob(f"{name.replace('-', '_')}-*.whl")) for name in projects}
+    versions = {wheel.name.split("-", maxsplit=2)[1] for wheel in wheels.values()}
+    assert len(versions) == 1, f"all distributions must share one version, got {versions}"
+    return wheels
 
 
 @pytest.mark.e2e
@@ -61,9 +64,21 @@ def test_requested_extra_installs_in_a_clean_python_container(
 import importlib.util
 import json
 import os
+from importlib.metadata import version
 from importlib.resources import files
+from std import __version__
 from std.config import ConfigManager, TomlSettings, YamlSettings
 selected_extras = set(__SELECTED_EXTRAS__)
+assert __version__ == version('standard')
+provider_distributions = {
+    'fastapi': 'standard-fastapi',
+    'aws': 'standard-aws',
+    'http': 'standard-http',
+    'cache': 'standard-cache',
+    'rdbms': 'standard-rdbms',
+}
+for extra in selected_extras:
+    assert version(provider_distributions[extra]) == version('standard')
 assert files('std').joinpath('py.typed').is_file()
 snapshot = ConfigManager.from_file('/config').snapshot
 class Settings(YamlSettings):

@@ -11,7 +11,8 @@ records the component boundaries and why they are used.
 | --- | --- | --- |
 | Distribution and import | The core PyPI distribution is `standard`; Python imports and the executable are named `std`. The CLI, skill, configuration, logging, and utility modules remain in `standard`. | Keep install, import, and executable names explicit. Do not split core or CLI into separate projects. |
 | Core capability direction | The `standard` core includes configuration, logging, `Service`, `BackgroundService(Service)`, utility helpers, the `std` CLI, and packaged agent guidance. | Core owns shared lifecycle abstractions; the async service contract is implemented in `std.service` and covered by lifecycle tests. |
-| Integration boundary | Publish independent distributions for FastAPI, AWS, HTTP, cache, and RDBMS, each under `std.<integration>`. Core extras are convenience selectors added as each provider is ready. | Each integration distribution owns its subpackage and runtime dependencies; core must not import integration code. PyPI 0.1.1 still bundles FastAPI and AWS. The 0.2.0 working tree has split those two source packages; their new distributions are not published. |
+| Integration boundary | Publish independent distributions for FastAPI, AWS, HTTP, cache, and RDBMS, each under `std.<integration>`. Core extras select the matching providers. | Each integration distribution owns its subpackage and runtime dependencies; core must not import integration code. PyPI 0.1.1 still bundles FastAPI and AWS. The unreleased source now separates all five integrations. |
+| Version and release | All six distributions use one annotated `vX.Y.Z` Git tag and one `release.yml` workflow. Versions come from `hatch-vcs`; release builds pin every cross-project requirement to that tag. | No per-distribution version fields or tags. CI verifies all 12 artifact versions and exact pins, then publishes core followed by providers. The tag selects the version; automation synchronizes it. |
 | Configuration entry points | `ConfigManager` provides file loading and immutable mapping snapshots; Pydantic Settings source adapters provide typed model integration over the same loader. | Consumers can choose a direct mapping API or Pydantic model validation without maintaining two file-parsing implementations. |
 | Configuration lifecycle | Parse and resolve sources when constructing or explicitly reloading; publish a new immutable `ConfigSnapshot` only after a successful load. | Repeated reads use prepared data. A failed reload must leave the last published snapshot intact. |
 | Source pipeline | Parse each file, resolve interpolation, merge directory files deterministically, then expose the result. Pydantic source priority is a separate layer. | Do not conflate within-directory merge order with priority among init values, files, environment, dotenv, and secrets. See the [configuration contract](../configuration/index.md). |
@@ -84,18 +85,18 @@ services --> models
 ## Distribution inventory and release plan
 
 The following names define the intended PyPI projects and Python import
-ownership. The first row is the existing core project. The other rows are
-planned projects; their names and publisher setup are not evidence that those
-projects have been published or reserved on PyPI.
+ownership. `standard` is the existing project. The five add-on source projects
+are implemented in this repository but have not yet been published or reserved
+on PyPI.
 
 | PyPI project | Purpose and owned imports | Dependency boundary | State |
 | --- | --- | --- | --- |
 | `standard` | Core library, configuration, logging, utilities, `std` CLI, and packaged skill. | Base runtime dependencies only. Extras are convenience selectors for integrations. | Published as 0.1.1. Core and CLI remain here. |
-| `standard-fastapi` | FastAPI integration at `std.fastapi`. | Depends on a supported `standard` version and FastAPI. | Source split and dedicated release workflow are in the working tree; PyPI returned 404 on 2026-10-12; publisher setup is unverified. |
-| `standard-aws` | AWS integration at `std.aws`. | Depends on a supported `standard` version and aioboto3. | Source split and dedicated release workflow are in the working tree; PyPI returned 404 on 2026-10-12; publisher setup is unverified. |
-| `standard-http` | HTTP client and authentication helpers at `std.http`. | Decide core compatibility and HTTP client dependencies with the API design. | Planned; PyPI returned 404 on 2026-10-12. |
-| `standard-cache` | Redis client, decorators, and locks at `std.cache`. | Decide core compatibility, Redis client, and locking contracts with the API design. | Planned; PyPI returned 404 on 2026-10-12. |
-| `standard-rdbms` | Relational database helpers at `std.rdbms`. | Decide core compatibility, SQLAlchemy support, and database drivers with the API design. | Planned; PyPI returned 404 on 2026-10-12. Do not publish an empty package. |
+| `standard-fastapi` | FastAPI integration at `std.fastapi`. | Depends on the matching `standard` release and FastAPI. | Implemented in source; PyPI returned 404 on 2026-10-12; publisher setup is owner action. |
+| `standard-aws` | AWS integration at `std.aws`. | Depends on the matching `standard` release and aioboto3. | Implemented in source; PyPI returned 404 on 2026-10-12; publisher setup is owner action. |
+| `standard-http` | HTTP client and authentication helpers at `std.http`. | Depends on the matching `standard` release and HTTPX. | Implemented in source; PyPI returned 404 on 2026-10-12; publisher setup is owner action. |
+| `standard-cache` | Redis client, decorators, and locks at `std.cache`. | Depends on the matching `standard` release and Redis. | Implemented in source; PyPI returned 404 on 2026-10-12; publisher setup is owner action. |
+| `standard-rdbms` | Relational database helpers at `std.rdbms`. | Depends on the matching `standard` release and SQLAlchemy/drivers. | Implemented in source; PyPI returned 404 on 2026-10-12; publisher setup is owner action. |
 
 The target monorepo layout is:
 
@@ -120,24 +121,14 @@ build with an explicit core-file allow-list so it cannot scoop up integration
 subpackages. Keep package ownership disjoint and verify combined installation
 of the wheels before release.
 
-On the core distribution, the extras map `fastapi` to `standard-fastapi` and
-`aws` to `standard-aws`; `http`, `cache`, and `rdbms` are added after those
-providers' APIs and packages are ready. Installing `standard` alone supplies
-only core modules. Each integration project can also be installed directly.
-The release tags are `vX.Y.Z` for `standard`, `standard-fastapi-vX.Y.Z` for
-FastAPI, and `standard-aws-vX.Y.Z` for AWS. Dedicated core, FastAPI, and AWS
-workflows are present. Future HTTP, cache, and RDBMS workflows must validate
-their own tag, project name, version, build path, and PyPI destination before
-requesting a publishing token. Separate workflow identities keep each Trusted
-Publisher scoped to one distribution.
-
-The current `v0.1.1` release contains both integration modules. The 0.2.0
-working tree builds core and add-on wheels independently and uses fresh-wheel
-checks for core-only, each provider, combined extras, and direct provider
-installation. Release core 0.2.0 before the add-ons so each add-on's core
-dependency can resolve; the extras become usable from PyPI after the matching
-provider is published. Publish no HTTP, cache, or RDBMS artifact until its
-public behavior and dependency contract are designed.
+The core distribution's five extras select their corresponding add-on
+projects. Installing `standard` alone supplies only core modules; each
+integration can also be installed directly. The published `v0.1.1` release
+still bundles FastAPI and AWS. The next release uses one `vX.Y.Z` tag for all
+six projects. A single workflow builds every wheel and source archive, verifies
+their metadata, then publishes the core and providers in order. Release builds
+pin the extras and provider core dependencies to that exact tag version, so
+the convenience installs resolve one coordinated set.
 
 Use `snake_case.py` for module and file names, `PascalCase` for classes, and
 `snake_case` for functions and variables. Keep modules cohesive and avoid
@@ -152,7 +143,7 @@ contains the full guidance for agents.
 | --- | --- |
 | Python support | CPython 3.11–3.14; project metadata requires Python 3.11 or newer. |
 | Base dependencies | PyYAML 6.x and pydantic-settings 2.x; TOML parsing uses the standard-library `tomllib`. |
-| Optional extras | In published 0.1.1, the FastAPI and AWS modules are bundled with `standard`. In the 0.2.0 source, `standard[fastapi]` and `standard[aws]` select the separate `standard-fastapi` and `standard-aws` distributions. Target `http`, `cache`, and `rdbms` extras follow after their packages are ready. |
+| Optional extras | In published 0.1.1, FastAPI and AWS modules are bundled with `standard`. In the next release, all five extras select separate distributions, and the release build pins each to the same tag version. |
 | Compatibility reference | Match documented and inspected behavior from `pydantic-settings-extra-sources` 0.1.0 where specified, while fixing the edge cases in the [configuration contract](../configuration/index.md). The reference package is test-only, not a runtime dependency. |
 | Pydantic source priority | By default: init kwargs, config files, process environment, dotenv, then file secrets. Callers may customize the order. |
 | Directory merge | Sort discovered files by normalized relative POSIX path; merge mappings recursively, append lists, and let later scalar or type conflicts replace earlier values. |
@@ -183,6 +174,7 @@ Status checked on 2026-10-12:
 - GitHub private vulnerability reporting is enabled through the repository's
   [Security Advisories page](https://github.com/appunni-m/python-standard/security/advisories).
 - The annotated `v0.1.1` release workflow completed successfully and the GitHub
-  release is live. This verifies Trusted Publishing for `standard`; the planned
-  integration publishers and multi-distribution release routing are not yet
-  configured or verified. See the [publishing guide](../publishing.md).
+  release is live. This verifies Trusted Publishing for `standard`. The shared
+  six-distribution workflow is configured in source; add-on publisher entries
+  and the coordinated OIDC path are not yet verified. See the
+  [publishing guide](../publishing.md).

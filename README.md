@@ -31,7 +31,7 @@ python -m pip install 'standard[rdbms]'
 python -m pip install 'standard[fastapi,aws,http,cache,rdbms]'
 ```
 
-The core provides YAML/TOML configuration, Pydantic Settings sources, immutable snapshots, recursive mapping helpers, atomic text writes, environment-aware logging, async service lifecycle management, and the `std` CLI. FastAPI, AWS, HTTP, cache, and RDBMS are separate integration distributions. The published `standard` 0.1.1 still bundles FastAPI and AWS; the repository's 0.2.0 layout splits all integrations into separate distributions and is not released yet. The extras shown above become installable from PyPI after their matching add-on distributions are published.
+The core provides YAML/TOML configuration, Pydantic Settings sources, immutable snapshots, recursive mapping helpers, atomic text writes, environment-aware logging, async service lifecycle management, and the `std` CLI. FastAPI, AWS, HTTP, cache, and RDBMS are separate integration distributions. The published `standard` 0.1.1 still bundles FastAPI and AWS; the unreleased source splits all integrations and will publish them together at one version from a shared `vX.Y.Z` tag. The extras shown above become installable from PyPI after that coordinated release.
 
 ## Install from this checkout
 
