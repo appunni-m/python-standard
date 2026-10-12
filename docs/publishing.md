@@ -15,10 +15,9 @@ The repository includes `.github/workflows/docs.yml`. It builds the docs with th
 
 ### First deploy
 
-1. Push this project's `main` branch to `origin` to start the first Pages deployment.
-2. In **Settings → Pages**, select **GitHub Actions** as the build and deployment source.
-3. Push a commit to `main`, or run the **Documentation** workflow from the Actions tab. The workflow builds `site/`, uploads it as a Pages artifact, and deploys it to the `github-pages` environment.
-4. Open the deployment job's environment URL to see the published site.
+1. In **Settings → Pages**, select **GitHub Actions** as the build and deployment source. A repository owner must do this once before the workflow can deploy; `configure-pages` fails if Pages is not enabled.
+2. The `main` branch is pushed. After enabling Pages, open **Actions → Documentation** and choose **Run workflow**, or rerun the first failed Documentation run. The workflow builds `site/`, uploads it as a Pages artifact, and deploys it to the `github-pages` environment.
+3. Open the deployment job's environment URL to see the published site.
 
 The workflow grants only `contents: read`, `pages: write`, and `id-token: write`, and uses GitHub's recommended Pages actions. See [GitHub's publishing-source guide](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site), [GitHub's custom-workflow requirements](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages), and [Zensical's GitHub Pages guide](https://zensical.org/docs/publish-your-site/).
 

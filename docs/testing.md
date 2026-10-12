@@ -20,7 +20,7 @@ The package metadata keeps each runtime integration independent. The Testcontain
 | `standard[aws]` | `.[aws]` | boto3 |
 | `standard[fastapi,aws]` | `.[fastapi,aws]` | FastAPI and boto3 |
 
-The existing PyPI name `standard` belongs to an unrelated project. The test matrix validates this checkout's distribution metadata and extras; public installation under `standard[...]` remains blocked until name ownership is resolved.
+PyPI name ownership is unconfirmed: the project page returned 404 during setup, while an indexed page still lists an older unrelated project. The test matrix validates this checkout's distribution metadata and extras; confirm name availability and ownership before public installation under `standard[...]`.
 
 ## Layers
 
