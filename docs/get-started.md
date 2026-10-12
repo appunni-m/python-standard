@@ -8,8 +8,15 @@ Standard is an alpha Python library published on [PyPI as `standard`](https://py
 python -m pip install standard
 python -m pip install 'standard[fastapi]'
 python -m pip install 'standard[aws]'
-python -m pip install 'standard[fastapi,aws]'
+python -m pip install 'standard[http]'
+python -m pip install 'standard[cache]'
+python -m pip install 'standard[rdbms]'
+python -m pip install 'standard[fastapi,aws,http,cache,rdbms]'
 ```
+
+These provider extras are part of the repository's 0.2.0 development layout.
+The published `standard` 0.1.1 does not yet include them; use the local package
+install commands below until the add-on releases are published.
 
 ## Install from this checkout
 
@@ -21,15 +28,18 @@ python3 -m venv .venv
 python -m pip install -e .
 ```
 
-On Windows, activate the environment with `.venv\Scripts\activate` instead. Add an integration extra when you need it:
+On Windows, activate the environment with `.venv\Scripts\activate` instead. Install a local integration project when you need it:
 
 | Need | Install command |
 | --- | --- |
-| FastAPI | `python -m pip install -e '.[fastapi]'` |
-| AWS | `python -m pip install -e '.[aws]'` |
-| Both | `python -m pip install -e '.[fastapi,aws]'` |
+| FastAPI | `python -m pip install -e . -e packages/standard-fastapi` |
+| AWS | `python -m pip install -e . -e packages/standard-aws` |
+| HTTP | `python -m pip install -e . -e packages/standard-http` |
+| Redis cache | `python -m pip install -e . -e packages/standard-cache` |
+| Relational databases | `python -m pip install -e . -e packages/standard-rdbms` |
+| All providers | `python -m pip install -e . -e packages/standard-fastapi -e packages/standard-aws -e packages/standard-http -e packages/standard-cache -e packages/standard-rdbms` |
 
-These commands install this checkout in editable mode. Use the PyPI commands above when you want the published distribution.
+These commands install this checkout in editable mode. The published `standard` 0.1.1 still bundles the FastAPI and AWS modules. In the repository's 0.2.0 layout, the named extras select the standalone distributions; that version and the add-ons are not published yet.
 
 ## Load a configuration file
 
@@ -71,12 +81,46 @@ class Settings(YamlSettings):
     std_config_file = "config/app.yaml"
     host: str
     port: int = 8080
-
-
-settings = Settings()
 ```
 
-`YamlSettings` reads `settings.yaml` by default; `std_config_file` selects another file. `TomlSettings` works the same way and defaults to `settings.toml`. Both convenience bases use this source priority: constructor values, config file, process environment, dotenv, then file secrets. The first source has the highest priority. A custom `settings_customise_sources` hook can change that order.
+Define this model in `core/settings.py`, then construct it once from `main.py`:
+
+```python
+from app.core.settings import Settings
+
+
+def main() -> None:
+    settings = Settings()
+    # Build the application and inject its validated settings here.
+
+
+if __name__ == "__main__":
+    main()
+```
+
+`main.py` is the only place that calls `Settings()`. `YamlSettings` reads `settings.yaml` by default; `std_config_file` selects another file. `TomlSettings` works the same way and defaults to `settings.toml`. Both convenience bases use this source priority: constructor values, config file, process environment, dotenv, then file secrets. The first source has the highest priority. A custom `settings_customise_sources` hook can change that order.
+
+## Configure application logging
+
+`std.logging` uses environment-aware defaults and lets explicit settings
+override the level and format independently:
+
+```python
+from std.logging import LoggingConfig, configure_logging
+
+configure_logging(
+    LoggingConfig(),
+    environment="production",
+    service_name="billing-api",
+)
+```
+
+Development uses `DEBUG` and readable console output. Tests use `WARNING` and
+console output. Staging and production use `INFO` and JSON lines. The default
+stream is stdout; JSON records include timestamp, severity, logger, message,
+environment, optional service/source fields, exception details, and
+structured `extra` fields. See the [logging guide](logging.md) for YAML-backed
+settings and custom formats.
 
 ## Agent commands
 
@@ -87,22 +131,22 @@ std skill show
 std skill install
 ```
 
-The skill install command writes `.agents/skills/standard-python/SKILL.md` by default. It refuses to replace an existing file; pass `--force` to replace it or give another destination path. See the [CLI reference](api.md#agent-cli).
+The skill install command writes `.agents/skills/standard-idiomatic-python/SKILL.md` by default. The directory name matches the skill's required Agent Skills metadata. The command refuses to replace an existing file; pass `--force` to replace it or give another destination path. See the [CLI reference](api.md#agent-cli).
 
 ## Current status
 
 | Area | Status |
 | --- | --- |
 | Project and import names | Distribution: `standard`; Python import: `std`; command: `std` |
-| First release scope | Configuration, collection and file helpers, optional FastAPI and AWS integrations, and agent guidance are implemented under `src/std/` |
+| Package layout | Core and CLI are under `src/std/`; FastAPI and AWS sources are under `packages/standard-fastapi/` and `packages/standard-aws/` |
 | Python versions | CPython 3.11–3.14 are declared and configured in tox and CI |
 | Test and benchmark commands | Unit, parity, Testcontainers consumer, and benchmark workflows are configured; see [testing](testing.md) for local evidence and environment limits |
 | Documentation site | Zensical source and a GitHub Pages workflow are configured |
-| PyPI | `standard` is published; base, FastAPI, AWS, and combined extras passed clean-environment install checks |
+| PyPI | `standard` 0.1.1 is published and its old extras passed clean-environment checks; the repository's 0.2.0 split and standalone add-ons are not published yet |
 | Hosted docs | Live at [appunni-m.github.io/python-standard](https://appunni-m.github.io/python-standard/); pushes to `main` deploy updates |
-| Security reporting | The repository owner still needs to configure a private reporting route |
+| Security reporting | GitHub private vulnerability reporting is enabled; use the **Report a vulnerability** button on the [Security Advisories page](https://github.com/appunni-m/python-standard/security/advisories) |
 
-Before the next automated release, verify the reported Trusted Publisher setup with a successful Release workflow run. The repository owner still needs to configure private vulnerability reporting. Do not publish under a substitute distribution name without an explicit project decision.
+As of 2026-10-12, PyPI serves `standard` 0.1.1, and its annotated tag and GitHub Release completed successfully. The repository version is 0.2.0; its new add-on publishers still need owner setup and release. See the [publishing guide](publishing.md) for exact workflow identities and tag formats.
 
 ## Read the docs
 

@@ -2,9 +2,11 @@
 
 This document records the behavior Standard preserves from [`pydantic-settings-extra-sources` 0.1.0](https://pypi.org/project/pydantic-settings-extra-sources/0.1.0/) and the edge cases it handles predictably. The implementation API is documented below.
 
+The component boundaries and reload model are summarized in the [architecture decisions](../decisions/index.md); this page is the detailed behavior contract for configuration.
+
 ## The goal
 
-Support the reference package's documented YAML/TOML, directory merge, environment interpolation, and Pydantic Settings integration. Fix ambiguous or unsafe edge cases while keeping configuration reads fast. The latest corrected current-dependency run shows a 5.10×–5.92× descriptive load ratio; **100× remains a target to investigate**. See the [benchmark results and measurement limits](benchmark-plan.md#results).
+Support the reference package's documented YAML/TOML, directory merge, environment interpolation, and Pydantic Settings integration. Fix ambiguous or unsafe edge cases while keeping configuration reads fast. The latest retained exploratory run, dated 2026-10-12, shows a 5.07×–6.47× descriptive settings-load ratio; it is a historical artifact, not a benchmark of the current checkout. **100× remains a target to investigate.** See the [benchmark results and measurement limits](benchmark-plan.md#results).
 
 ## Compatibility baseline
 
@@ -97,4 +99,4 @@ The exact 0.1.0 release is used as a pinned test and benchmark oracle through th
 
 ## Design exit criteria
 
-The public API and runtime policy are defined. Unit tests cover the edge cases above, and live oracle tests compare ordinary YAML/TOML values, interpolation, YAML directory merging, and source precedence. The Testcontainers consumer scenario builds and installs the wheel with no extras, each integration extra on its own, and both integrations together; it mounts YAML and TOML and exercises both Pydantic Settings adapters. All four cases pass locally with the Rancher-compatible settings documented in [testing](../testing.md); the hosted CI result remains pending a connected repository.
+The configuration API and runtime policy are defined. Unit tests cover the edge cases above, and live oracle tests compare ordinary YAML/TOML values, interpolation, YAML directory merging, and source precedence. The Testcontainers consumer scenario builds the core and both add-on wheels, then installs the core alone, each integration extra, and both extras; it mounts YAML and TOML and exercises both Pydantic Settings adapters. The published 0.1.1 checks and hosted [CI run 38226724973](https://github.com/appunni-m/python-standard/actions/runs/38226724973) predate the repository's 0.2.0 packaging changes, so rerun the container suite for this working tree before release.

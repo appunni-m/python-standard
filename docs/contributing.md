@@ -11,7 +11,7 @@ make docs-build
 
 The project targets CPython 3.11–3.14 and uses MIT licensing. Keep the core install small, preserve the documented config compatibility and error contracts, and isolate integrations behind their named extras. Update the public API documentation when behavior changes.
 
-Thank you for helping shape Standard. It is an early-stage, pre-release library, so proposals and clear examples are especially useful.
+Thank you for helping shape Standard. It is an early-stage alpha library, so proposals and clear examples are especially useful.
 
 ## Before proposing a feature
 
@@ -41,9 +41,9 @@ Keep pages focused. Label a statement as a fact, proposal, or open decision. Avo
 
 ## Code changes
 
-Run `make check` before submitting. It runs the supported Python test environments available on your machine, Ruff formatting and lint checks, strict mypy, and a clean docs build. Run `make test-e2e` separately when Docker is available; CI runs the Testcontainers suite in its own Docker-enabled job.
+Follow the repository rules in [`AGENTS.md`](https://github.com/appunni-m/python-standard/blob/main/AGENTS.md). Run `make check` before submitting. It runs the supported Python test environments available on your machine, Ruff formatting and lint checks, strict mypy, coverage, and a clean docs build. Run `make test-e2e` separately when Docker is available; CI runs the Testcontainers suite in its own Docker-enabled job.
 
-Use `std skill show` for the project's idiomatic Python and public API guidance; the checks below enforce the repository-specific rules.
+Use `std skill show` for the project's idiomatic Python, application architecture, and public API guidance; the checks below enforce the repository-specific rules.
 
 Ruff is the project's single formatter, linter, and style checker. The formatter and selected lint rules live in `pyproject.toml`; do not add overlapping tools such as Black, isort, or Flake8 unless a specific uncovered check justifies it. The configured Ruff exceptions are limited to constructor and special-method docstrings, with test module/function docstrings handled separately.
 

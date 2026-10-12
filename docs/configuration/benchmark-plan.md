@@ -1,6 +1,6 @@
 # Configuration benchmark plan
 
-The executable workload is `benchmarks/configuration.py`; run it with `make bench` after `make install` has installed the repository's development requirements. It writes a raw JSON result under `benchmarks/results/` with Python/platform identity, dependency versions, input digests, and a source manifest fingerprint. Before timing, it compares the Pydantic Settings integration against the pinned 0.1.0 reference.
+The executable workload is `benchmarks/configuration.py`; run it with `make bench` after `make install` has installed the repository's development requirements. It writes a raw JSON result under `benchmarks/results/` with Python/platform identity, dependency versions, input digests, and a source manifest fingerprint. Before timing, it compares the Pydantic Settings integration against the pinned 0.1.0 reference. Results below are historical exploratory artifacts; use a fresh run on the current commit before making a current performance claim.
 
 ## Questions the benchmark must answer
 

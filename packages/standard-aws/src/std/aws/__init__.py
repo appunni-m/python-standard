@@ -1,4 +1,4 @@
-"""Optional AWS Secrets Manager settings source."""
+"""Asynchronous AWS integrations for Standard applications."""
 
 from __future__ import annotations
 
@@ -7,15 +7,20 @@ from collections.abc import Mapping
 from importlib import import_module
 from typing import Any, NoReturn
 
-try:
-    # The optional type environment intentionally omits third-party boto3 stubs.
-    boto3: Any = import_module("boto3")
-except ImportError as error:  # pragma: no cover - depends on installation extra
-    raise ImportError(
-        "AWS integration requires the aws extra; from a checkout run `pip install -e '.[aws]'`"
-    ) from error
-
 from pydantic_settings import BaseSettings, PydanticBaseSettingsSource
+
+from .auth.credentials import (
+    AWSCredentials,
+    CredentialProvider,
+    DefaultCredentialProvider,
+    EnvironmentCredentialProvider,
+    ExplicitCredentialProvider,
+    ProfileCredentialProvider,
+)
+from .dynamodb.table import DynamoDBConfig, DynamoTable
+from .s3.client import S3Client, S3ClientConfig
+from .sqs.client import SQSClient, SQSConfig
+from .sqs.consumer import SQSConsumer
 
 
 class AwsSecretError(RuntimeError):
@@ -47,11 +52,16 @@ def load_secret(
     if not secret_id.strip():
         raise ValueError("secret_id must not be empty")
     try:
-        secrets_client = (
-            client
-            if client is not None
-            else boto3.client("secretsmanager", region_name=region_name)
-        )
+        if client is None:
+            try:
+                boto3: Any = import_module("boto3")
+            except ImportError as error:  # pragma: no cover - installation dependent
+                raise ImportError(
+                    "AWS Secrets Manager requires boto3; install `standard-aws` or `standard[aws]`."
+                ) from error
+            secrets_client = boto3.client("secretsmanager", region_name=region_name)
+        else:
+            secrets_client = client
         response = secrets_client.get_secret_value(SecretId=secret_id)
         if "SecretString" in response:
             raw = response["SecretString"]
@@ -69,7 +79,7 @@ def load_secret(
             object_pairs_hook=_unique_json_object,
             parse_constant=_reject_non_finite_number,
         )
-    except AwsSecretError:
+    except (AwsSecretError, ImportError):
         raise
     except Exception:
         raise AwsSecretError("AWS Secrets Manager request or JSON decoding failed") from None
@@ -104,4 +114,21 @@ class AwsSecretsManagerSettingsSource(PydanticBaseSettingsSource):
         return None, field_name, False
 
 
-__all__ = ["AwsSecretError", "AwsSecretsManagerSettingsSource", "load_secret"]
+__all__ = [
+    "AWSCredentials",
+    "AwsSecretError",
+    "AwsSecretsManagerSettingsSource",
+    "CredentialProvider",
+    "DefaultCredentialProvider",
+    "DynamoDBConfig",
+    "DynamoTable",
+    "EnvironmentCredentialProvider",
+    "ExplicitCredentialProvider",
+    "ProfileCredentialProvider",
+    "S3Client",
+    "S3ClientConfig",
+    "SQSClient",
+    "SQSConfig",
+    "SQSConsumer",
+    "load_secret",
+]

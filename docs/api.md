@@ -4,14 +4,27 @@
 
 | Module or command | Availability | Purpose |
 | --- | --- | --- |
+| `std.__version__` | Core | Installed distribution version string |
 | `std.config` | Core | YAML/TOML loading, Pydantic Settings sources, and immutable snapshots |
 | `std.collections` | Core | Nested mapping merge and path helpers |
 | `std.files` | Core | Atomic text-file replacement |
+| `std.logging` | Core | Environment-aware standard logging presets and structured JSON output |
+| `std.service` | Core | Async service lifecycle and managed background tasks |
 | `std` command | Core | Agent guidance and the packaged Python skill |
-| `std.fastapi` | `fastapi` extra | FastAPI dependency for a Pydantic Settings model |
-| `std.aws` | `aws` extra | AWS Secrets Manager loader and Pydantic source |
+| `std.fastapi` | `standard-fastapi` or `standard[fastapi]` | App setup, lifecycle, token auth, health checks, request logging, and Pydantic Settings dependencies |
+| `std.aws` | `standard-aws` or `standard[aws]` | AWS Secrets Manager loader and Pydantic source |
+| `std.http` | `standard-http` or `standard[http]` | Async HTTPX client, retries, response models, and authentication |
+| `std.cache` | `standard-cache` or `standard[cache]` | Redis client, sync/async cache decorators, and distributed locks |
+| `std.rdbms` | `standard-rdbms` or `standard[rdbms]` | Async SQLAlchemy database managers for SQLite, PostgreSQL, and MySQL |
 
-Install the public integrations with `python -m pip install 'standard[fastapi]'` or `python -m pip install 'standard[aws]'`. From a checkout, use `python -m pip install -e '.[fastapi]'` or `python -m pip install -e '.[aws]'`. The current distribution is available at [PyPI](https://pypi.org/project/standard/); see [getting started](get-started.md#current-status) for verification status.
+The published `standard` 0.1.1 bundles the FastAPI and AWS modules. The
+repository's 0.2.0 layout gives each integration its own distribution; the
+add-ons and their convenience extras are not published yet. From a checkout,
+install core plus the relevant `packages/standard-*` project in editable mode.
+See [current release status](index.md#current-release-status) and
+[publishing](publishing.md) for release status. The focused guides cover
+[HTTP](http.md), [Redis cache](cache.md), and
+[relational databases](rdbms.md).
 
 ## Configuration
 
@@ -28,6 +41,8 @@ updated = manager.reload()
 - `ConfigManager.from_files(*paths, optional=False, environ=None)` composes files and directories in argument order. Files discovered inside each directory are sorted by normalized relative POSIX path.
 - `ConfigManager.snapshot` returns the current immutable `ConfigSnapshot`.
 - `ConfigManager.reload(*, environ=None)` parses a complete candidate and publishes it atomically. It returns the new snapshot; if parsing fails, the previous snapshot remains current. An explicit `environ` mapping applies to that reload only.
+- `ConfigSnapshot.revision` starts at `1` and increments after each successful reload.
+- `ConfigSnapshot.sources` is a tuple of the source file paths used to build that snapshot. Directory inputs expand to their matched YAML/TOML files in merge order.
 - `ConfigSnapshot.get_path(path, default=None)` reads a dotted string or a sequence of string path segments. A missing segment returns `default`.
 - `ConfigSnapshot.to_dict()` returns an independent mutable copy. Nested mappings become dictionaries, sequences become lists, and frozen sets become sets.
 
@@ -46,6 +61,8 @@ The merge rules are: recursively merge mappings, append lists, and replace other
 Errors include the source path and location when available. Interpolation and parser errors do not include configuration or environment values.
 
 ### Pydantic Settings
+
+Define the application's settings aggregate in `core/settings.py`:
 
 ```python
 from std.config import YamlSettings
@@ -74,35 +91,132 @@ Each source returns the loaded mapping to Pydantic Settings. Use one in `setting
 - `std.collections.set_path(mapping, path, value)` mutates the supplied dictionary, creating intermediate dictionaries. The path must contain at least one non-empty string segment. It raises `ValueError` for an empty/invalid path and `TypeError` if it must descend through a non-dictionary value.
 - `std.files.atomic_write_text(path, text, *, encoding="utf-8", mode=0o600, create_parents=False)` returns the target `Path` after writing a temporary sibling, flushing it, and atomically replacing the destination. Parent directories must already exist unless `create_parents=True`. The default mode is owner-only; set `mode` to choose another permission mode.
 
+## Logging
+
+`std.logging.LoggingEnvironment`, `LoggingLevel`, and `LoggingFormat` describe
+the supported values. `LoggingConfig` validates environment-independent
+formatter, stream, color, source, and named-logger options. Its `format` field
+accepts `auto`, `console`, `json`, or `custom`; custom formatting requires a
+formatter string and supports the standard `%`, `{`, and `$` styles.
+
+`configure_logging(config=None, *, environment="development", service_name=None)`
+configures the process root logger. Environment defaults are `DEBUG` plus
+console in development, `WARNING` plus console for tests, and `INFO` plus JSON
+for staging and production. Explicit `level` and `format` settings override
+those defaults independently. Logs go to stdout by default; the config can
+select stderr. Existing loggers stay enabled. See the [logging guide](logging.md)
+for YAML, JSON fields, overrides, and security considerations.
+
+## Services
+
+`std.service.Service` provides serialized asynchronous `start()` and `stop()`
+transitions, a `ServiceState`, health checks, and async context-manager support.
+Implement `_start()` and `_stop()` to acquire and release resources. Repeated
+starts while running and stops while idle or stopped are safe. If startup
+fails, the service enters `failed`; call `stop()` to release partially acquired
+resources before retrying.
+
+`BackgroundService` extends `Service` and runs its `run()` coroutine in a
+managed task. The coroutine can wait on `stop_event` to exit gracefully.
+Shutdown waits for `shutdown_timeout`, cancels a worker that does not exit,
+then waits once more for cancellation cleanup. Unexpected exit sets
+`state == ServiceState.FAILED`; `failure` exposes its cause and `wait()` raises
+`BackgroundServiceError` chained from that cause. A failed service can still be
+stopped to release its resources.
+
+```python
+import asyncio
+
+from std.service import BackgroundService
+
+
+class QueueWorker(BackgroundService):
+    async def run(self) -> None:
+        while not self.stop_event.is_set():
+            await asyncio.sleep(0.1)  # Replace with a queue receive operation.
+
+
+async def main() -> None:
+    worker = QueueWorker("queue-worker")
+    await worker.start()
+    await worker.stop()
+
+
+asyncio.run(main())
+```
+
 ## Optional integrations
 
 ### FastAPI
 
-Install the `fastapi` extra before importing `std.fastapi`:
+Install `standard-fastapi` directly, or the `standard[fastapi]` convenience extra after that add-on is published. From a source checkout, install `packages/standard-fastapi` in editable mode.
+
+In `main.py`, construct that settings model once and inject it into the FastAPI application:
 
 ```python
-from fastapi import FastAPI
-from std.config import YamlSettings
+from fastapi import Depends, FastAPI
+from app.core.settings import Settings
 from std.fastapi import settings_dependency
 
-app = FastAPI()
 
+def create_app() -> FastAPI:
+    settings = Settings()  # Construct once in this application composition root.
+    app = FastAPI()
+    app.state.settings = settings
+    settings_dep = settings_dependency(Settings)
 
-class Settings(YamlSettings):
-    std_config_file = "settings.yaml"
-    service_name: str
+    @app.get("/health")
+    async def health(settings: Settings = Depends(settings_dep)) -> dict[str, str]:
+        return {"service": settings.service_name}
 
-
-@app.get("/health")
-def health(settings: Settings = settings_dependency(Settings)):
-    return {"service": settings.service_name}
+    return app
 ```
 
-`settings_dependency(settings_type)` requires a `BaseSettings` subclass and returns a FastAPI dependency. FastAPI caches the dependency once per request by default. Use `app.dependency_overrides` when tests or the application need a replacement.
+`settings_dependency(settings_type)` requires a `BaseSettings` subclass and
+returns a FastAPI dependency that retrieves the matching instance from
+`request.app.state.settings`. Construct settings once in `main.py` and store
+that instance before serving requests; the dependency never constructs or
+reloads settings. An absent or wrong-typed value returns HTTP 500 with a
+configuration message. Use `app.dependency_overrides` when tests need a
+replacement.
+
+`APIConfig` validates app metadata, deployment environment, server options, and
+CORS policy. `FastAPISetup(api_config, log_config=None, setup_handler=None,
+*, services=())` creates the app, configures logging when requested, installs
+CORS, and wires a `LifecycleManager` into the ASGI lifespan. The `host`,
+`port`, `workers`, `reload`, and `enabled` fields are available to the server
+entry point; the setup helper does not launch Uvicorn.
+
+`LifecycleManager` starts injected services in order and stops them in reverse
+order. It calls cleanup for the service whose startup failed, continues
+cleaning earlier services, and preserves the startup exception. Shutdown
+attempts every cleanup hook and raises an `ExceptionGroup` if multiple hooks
+fail. The ASGI server owns process signal handling.
+
+`AppTokenConfig` stores a configurable header, unique application tokens, an
+enabled flag, and exact or wildcard excluded paths. Token values are omitted
+from the model representation. `AppTokenAuth` can be used as a FastAPI
+dependency and returns the matching application name; missing or invalid
+tokens raise HTTP 401. `apply_token_auth_middleware` protects requests before
+route dispatch and puts the authenticated name in `request.state.app_name`.
+Both auth helpers skip excluded paths. `setup_token_auth` returns the
+dependency; `setup_app_token_auth` is its alias. `add_api_key_security_scheme`
+adds the configured header to generated OpenAPI.
+
+`HealthCheck` accepts sync or async functions. Synchronous checks run through
+the event loop's executor, check failures produce sanitized details containing
+the exception type, and any `error`, `unhealthy`, or `down` result makes the
+aggregate response unhealthy. `create_health_endpoint` is the app-registration
+factory. The endpoint retains HTTP 200 and reports state in its response body.
+
+`LoggingMiddleware` logs method, path, response status, and elapsed time, adds
+an `X-Process-Time` response header, and can omit the client address with
+`include_client=False`. It never reads request or response bodies. `APIService`
+is a small base for registering one route group on an injected FastAPI app.
 
 ### AWS Secrets Manager
 
-Install the `aws` extra before importing `std.aws`:
+Install `standard-aws` directly, or the `standard[aws]` convenience extra after that add-on is published:
 
 ```python
 from std.aws import load_secret
@@ -124,4 +238,8 @@ std skill path
 std skill install [destination] [--force]
 ```
 
-`std guide` prints concise usage instructions; `--format json` prints a JSON object containing the distribution name, import name, version, and guide. `std skill show` prints the packaged idiomatic-Python skill. `std skill path` prints the path to that resource. `std skill install` copies it into the current repository at `.agents/skills/standard-python/SKILL.md` by default. It returns status 2 and refuses to overwrite an existing file unless `--force` is supplied; filesystem failures return status 1.
+`std guide` prints concise usage instructions. `std guide --format json` emits a JSON object with `schema_version: 1`, distribution/import/command names, version and Python requirement, shell-ready install commands, module availability, commands, skill location, documentation URLs, and the text guide. Consumers should check `schema_version` and ignore unrecognized fields.
+
+`std skill show` prints the packaged idiomatic-Python skill. `std skill path` prints its filesystem path when the package was installed on the filesystem; for a non-filesystem package resource, it returns status 1 and directs the caller to `show` or `install`. `std skill install` copies it into the current repository at `.agents/skills/standard-idiomatic-python/SKILL.md` by default. That directory name matches the skill's `name` metadata as required by the [Agent Skills specification](https://agentskills.io/specification). It returns status 2 and refuses to overwrite an existing path unless `--force` is supplied; filesystem failures return status 1.
+
+The supported command-line interface is the installed `std` executable. `std.cli.main` is its implementation entry point, not a separate library API. The root `std` package exposes `__version__`; import public utilities from the documented modules above.

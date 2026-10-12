@@ -4,14 +4,22 @@ build-backend = "hatchling.build"
 
 [project]
 name = "standard"
-version = "0.1.1"
+version = "0.2.0"
 description = "A predictable Python utility library with an agent-first interface"
 readme = "README.md"
 requires-python = ">=3.11"
 license = "MIT"
 license-files = ["LICENSE"]
 authors = [{ name = "Standard contributors" }]
-keywords = ["configuration", "yaml", "toml", "pydantic", "utilities"]
+keywords = [
+  "configuration",
+  "yaml",
+  "toml",
+  "pydantic",
+  "logging",
+  "structured-logging",
+  "utilities",
+]
 classifiers = [
   "Development Status :: 3 - Alpha",
   "Intended Audience :: Developers",
@@ -24,26 +32,53 @@ classifiers = [
   "Programming Language :: Python :: 3.14",
   "Typing :: Typed",
 ]
+urls = { Documentation = "https://appunni-m.github.io/python-standard/", Repository = "https://github.com/appunni-m/python-standard", Changelog = "https://appunni-m.github.io/python-standard/changelog/" }
 dependencies = [
   "PyYAML>=6,<7",
   "pydantic-settings>=2.6,<3",
 ]
 
 [project.optional-dependencies]
-fastapi = ["fastapi>=0.115,<1"]
-aws = ["boto3>=1.35,<2"]
+fastapi = ["standard-fastapi>=0.1,<0.2"]
+aws = ["standard-aws>=0.1,<0.2"]
+http = ["standard-http>=0.1,<0.2"]
+cache = ["standard-cache>=0.1,<0.2"]
+rdbms = ["standard-rdbms>=0.1,<0.2"]
 
 [project.scripts]
 std = "std.cli:main"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/std"]
+only-include = [
+  "src/std/__init__.py",
+  "src/std/cli.py",
+  "src/std/collections.py",
+  "src/std/config",
+  "src/std/files.py",
+  "src/std/logging.py",
+  "src/std/service.py",
+  "src/std/py.typed",
+]
+sources = ["src"]
 
 [tool.hatch.build.targets.wheel.force-include]
-"src/std/skills/idiomatic-python.md" = "std/skills/idiomatic-python.md"
+"src/std/skills/standard-idiomatic-python/SKILL.md" = "std/skills/standard-idiomatic-python/SKILL.md"
 
 [tool.hatch.build.targets.sdist]
-only-include = ["pyproject.toml", "README.md", "LICENSE", "src/std"]
+only-include = [
+  "pyproject.toml",
+  "README.md",
+  "LICENSE",
+  "src/std/__init__.py",
+  "src/std/cli.py",
+  "src/std/collections.py",
+  "src/std/config",
+  "src/std/files.py",
+  "src/std/logging.py",
+  "src/std/service.py",
+  "src/std/py.typed",
+  "src/std/skills/standard-idiomatic-python/SKILL.md",
+]
 ignore-vcs = false
 
 [tool.pytest.ini_options]
@@ -67,7 +102,15 @@ fail_under = 90
 [tool.ruff]
 target-version = "py311"
 line-length = 100
-src = ["src", "tests"]
+src = [
+  "src",
+  "packages/standard-fastapi/src",
+  "packages/standard-aws/src",
+  "packages/standard-http/src",
+  "packages/standard-cache/src",
+  "packages/standard-rdbms/src",
+  "tests",
+]
 
 [tool.ruff.lint]
 # RUF100 rejects unused noqa suppressions.
@@ -80,7 +123,7 @@ per-file-ignores = { "tests/**/*.py" = ["D100", "D103"] }
 python_version = "3.11"
 strict = true
 enable_error_code = ["ignore-without-code"]
-mypy_path = "src"
+mypy_path = "src,packages/standard-fastapi/src,packages/standard-aws/src,packages/standard-http/src,packages/standard-cache/src,packages/standard-rdbms/src"
 packages = ["std"]
 
 [tool.tox]
@@ -89,9 +132,17 @@ env_list = ["py311", "py312", "py313", "py314", "lint", "type", "docs"]
 skip_missing_interpreters = true
 
 [tool.tox.env_run_base]
-package = "wheel"
-extras = ["fastapi", "aws"]
-deps = ["-r requirements-test.txt"]
+package = "skip"
+skip_install = true
+deps = [
+  "-r requirements-test.txt",
+  ".",
+  "packages/standard-fastapi",
+  "packages/standard-aws",
+  "packages/standard-http",
+  "packages/standard-cache",
+  "packages/standard-rdbms",
+]
 set_env = { COVERAGE_FILE = ".coverage.{env_name}" }
 commands = [["python", "-m", "coverage", "run", "-m", "pytest", "-m", "not e2e"], ["python", "-m", "coverage", "report"]]
 
@@ -99,7 +150,7 @@ commands = [["python", "-m", "coverage", "run", "-m", "pytest", "-m", "not e2e"]
 package = "skip"
 skip_install = true
 deps = ["ruff>=0.14,<1"]
-commands = [["python", "-m", "ruff", "format", "--check", "src", "tests", "benchmarks"], ["python", "-m", "ruff", "check", "src", "tests", "benchmarks"]]
+commands = [["python", "-m", "ruff", "format", "--check", "src", "packages", "tests", "benchmarks"], ["python", "-m", "ruff", "check", "src", "packages", "tests", "benchmarks"]]
 
 [tool.tox.env.type]
 package = "skip"
@@ -110,9 +161,26 @@ deps = [
   "mypy>=1.18,<2",
   "pydantic-settings>=2.6,<3",
   "PyYAML>=6,<7",
+  ".",
+  "packages/standard-fastapi",
+  "packages/standard-aws",
+  "packages/standard-http",
+  "packages/standard-cache",
+  "packages/standard-rdbms",
   "types-PyYAML>=6,<7",
 ]
-commands = [["python", "-m", "mypy", "src/std"]]
+commands = [[
+  "python",
+  "-m",
+  "mypy",
+  "--explicit-package-bases",
+  "src/std",
+  "packages/standard-fastapi/src/std/fastapi",
+  "packages/standard-aws/src/std/aws",
+  "packages/standard-http/src/std/http",
+  "packages/standard-cache/src/std/cache",
+  "packages/standard-rdbms/src/std/rdbms",
+]]
 
 [tool.tox.env.docs]
 package = "skip"
@@ -121,7 +189,17 @@ deps = ["zensical==0.0.69"]
 commands = [["zensical", "build", "--clean"]]
 
 [tool.tox.env.e2e]
-extras = ["fastapi", "aws"]
-deps = ["-r requirements-test.txt", "hatchling>=1.27,<2"]
+package = "skip"
+skip_install = true
+deps = [
+  "-r requirements-test.txt",
+  ".",
+  "packages/standard-fastapi",
+  "packages/standard-aws",
+  "packages/standard-http",
+  "packages/standard-cache",
+  "packages/standard-rdbms",
+  "hatchling>=1.27,<2",
+]
 pass_env = ["STD_REQUIRE_DOCKER", "TESTCONTAINERS_RYUK_DISABLED", "TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE"]
 commands = [["python", "-m", "pytest", "-m", "e2e", "-q"]]

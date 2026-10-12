@@ -1,7 +1,7 @@
 .PHONY: install check lint type test test-unit test-e2e bench docs-install docs-serve docs-build clean
 
 install:
-	python -m pip install -e '.[fastapi,aws]' -r requirements-test.txt -r requirements-docs.txt 'tox>=4,<5' 'mypy>=1.18,<2' 'ruff>=0.14,<1'
+	python -m pip install -e . -e packages/standard-fastapi -e packages/standard-aws -e packages/standard-http -e packages/standard-cache -e packages/standard-rdbms -r requirements-test.txt -r requirements-docs.txt 'tox>=4,<5' 'mypy>=1.18,<2' 'ruff>=0.14,<1'
 
 check:
 	tox run

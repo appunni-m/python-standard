@@ -8,7 +8,7 @@ This survey identifies useful approaches to study. It does not rank the projects
 | --- | --- | --- |
 | [Pydantic Settings](https://docs.pydantic.dev/latest/concepts/pydantic_settings/) | Typed settings, configurable source priority, and a YAML source. | Measure validation and source flexibility against the desired hot-read path. |
 | [Dynaconf](https://www.dynaconf.com/settings_files/) | Multiple settings files, environment layers, and environment switching. | Study its broader settings model and how it represents precedence. |
-| [OmegaConf](https://omegaconf.readthedocs.io/en/latest/structured_config.html) | Hierarchical merge and structured validation. | Compare its data model and access costs with the planned API. |
+| [OmegaConf](https://omegaconf.readthedocs.io/en/latest/structured_config.html) | Hierarchical merge and structured validation. | Compare its data model and access costs with Standard's documented API. |
 | [Hydra](https://hydra.cc/docs/intro/) | Config composition, groups, command-line overrides, and multirun. | It is an application configuration framework; compare scope carefully. |
 | [`pydantic-settings-extra-sources`](https://pypi.org/project/pydantic-settings-extra-sources/0.1.0/) | YAML/env interpolation and directory-based sources, as requested for study. | Early artifact; its published page has inconsistent package/import naming. Its exact source archive has been inspected; verify imports rather than relying on its README examples. |
 | [`confspec`](https://pypi.org/project/confspec/) | Interpolation and validation adapters across formats. | Newer project; evaluate maturity, API stability, and comparable features. |
@@ -18,7 +18,7 @@ This survey identifies useful approaches to study. It does not rank the projects
 - Match the reference package's documented feature set; differentiate through clear semantics, edge-case correctness, and measured performance.
 - Performance comparisons must use the same config shape, precedence, interpolation, validation, and output guarantees.
 - The requested `pydantic-settings-extra-sources` package is the compatibility reference, not a dependency. Its exact source archive has been inspected; the adopted behavior and edge-case decisions are summarized in the [configuration contract](index.md).
-- PyPI now lists `standard` 0.1.0 under maintainer `appunni-m`; fresh installs of the base package and all extras passed on 2026-10-12. See [publishing](../publishing.md) for the current release-workflow status.
+- PyPI lists `standard` 0.1.1 under maintainer `appunni-m`; fresh installs of the base package and all existing extras passed on 2026-10-12. Those checks cover the published artifact, which still bundles integration modules. Repository version 0.2.0 splits add-ons into separate distributions; see [publishing](../publishing.md) for the new workflow and publisher status.
 
 ## Closer look at the provided 0.1.0 source archive
 
