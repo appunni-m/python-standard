@@ -1,0 +1,59 @@
+{
+  "size": 3000,
+  "iterations_per_sample": 3,
+  "paired_repeats": 9,
+  "input_bytes": 567310,
+  "input_sha256": "84c47e691204300946ac9d1f05463f16c73af4c02b3ac42b8145518fca3975ec",
+  "samples": {
+    "baseline": {
+      "median_ms": 569.1104033333735,
+      "mad_ms": 11.284290000427744
+    },
+    "candidate": {
+      "median_ms": 570.5668856668732,
+      "mad_ms": 7.309390999580501
+    }
+  },
+  "paired_delta_ms": [
+    38.652835333171765,
+    10.431639666421688,
+    6.624547000076975,
+    16.67281899972295,
+    27.329978667088085,
+    30.5902280003163,
+    -45.65806200056011,
+    -31.446570999833057,
+    -29.707009999886736
+  ],
+  "paired_median_improvement_ms": -10.431639666421688,
+  "schema": "standard/config-resolver-candidate@1",
+  "measurement_date": "2026-10-12",
+  "measurement_boundary": "ConfigManager.from_file through immutable snapshot publication",
+  "baseline": "Recursive resolver from src/std/config/loader.py before the experiment",
+  "candidate": "Inline scalar fast path in _resolve_value; rejected and reverted",
+  "runtime": {
+    "python": "3.12.11 (main, Jun  7 2025, 13:59:56) [GCC 13.3.0]",
+    "implementation": "CPython",
+    "platform": "Linux-7.0.0-38-generic-x86_64-with-glibc2.39",
+    "architecture": "x86_64",
+    "cpu_model": "AMD Ryzen 5 2600X Six-Core Processor",
+    "cpu_count": 12,
+    "memory_bytes": 16706703360,
+    "power_mode": null
+  },
+  "toolchain": {
+    "PyYAML": "6.0.3",
+    "pydantic": "2.12.5",
+    "pydantic-settings": "2.6.0",
+    "pydantic-settings-extra-sources": "0.1.0"
+  },
+  "measurement_policy": {
+    "order": "baseline and candidate alternated across paired samples",
+    "paired_repeats": 9,
+    "iterations_per_variant_per_sample": 3,
+    "cache_state": "warm OS file cache",
+    "concurrency": 1,
+    "correctness": "section count and first/last interpolated endpoints checked after every load"
+  },
+  "decision": "rejected: candidate did not show a repeatable whole-call gain beyond sample variation"
+}

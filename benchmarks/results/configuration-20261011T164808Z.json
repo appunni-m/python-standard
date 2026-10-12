@@ -1,0 +1,95 @@
+{
+  "schema": "standard/config-benchmark@1",
+  "created_at": "2026-10-11T16:48:08.467123+00:00",
+  "command": [
+    "/home/appunni/.pyenv/versions/3.12.11/bin/python",
+    "benchmarks/configuration.py",
+    "--size",
+    "medium",
+    "--repeats",
+    "3"
+  ],
+  "runtime": {
+    "python": "3.12.11 (main, Jun  7 2025, 13:59:56) [GCC 13.3.0]",
+    "implementation": "CPython",
+    "platform": "Linux-7.0.0-38-generic-x86_64-with-glibc2.39",
+    "cpu_count": 12
+  },
+  "target": {
+    "revision": "unavailable",
+    "dirty": true
+  },
+  "oracle": {
+    "name": "pydantic-settings-extra-sources",
+    "version": "0.1.0"
+  },
+  "workloads": [
+    {
+      "id": "medium",
+      "sections": 500,
+      "yaml_bytes": 67450,
+      "checks": {
+        "target_matches_reference": true,
+        "target_matches_input": true,
+        "directory_merge_matches_input": true
+      },
+      "measurements": {
+        "settings_load_target": {
+          "repeats": 3,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 0.051990007999847876,
+          "seconds_per_call_samples": [
+            0.051990007999847876,
+            0.051890038999772514,
+            0.05625639299978502
+          ]
+        },
+        "settings_load_reference": {
+          "repeats": 3,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 0.36651301399979275,
+          "seconds_per_call_samples": [
+            0.3698056279999946,
+            0.36651301399979275,
+            0.36581870300005903
+          ]
+        },
+        "warm_lookup_10000": {
+          "repeats": 3,
+          "iterations_per_repeat": 10000,
+          "seconds_per_call_median": 5.299154900012581e-06,
+          "seconds_per_call_samples": [
+            5.449011099972267e-06,
+            5.271046999996543e-06,
+            5.299154900012581e-06
+          ]
+        },
+        "directory_merge": {
+          "repeats": 3,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 0.05665656399969521,
+          "seconds_per_call_samples": [
+            0.05634182299991153,
+            0.05665656399969521,
+            0.05687674299997525
+          ]
+        },
+        "reload": {
+          "repeats": 3,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 0.056691452999984904,
+          "seconds_per_call_samples": [
+            0.05703009299986661,
+            0.056691452999984904,
+            0.056286143000306765
+          ]
+        },
+        "load_memory": {
+          "current_bytes": 602025,
+          "peak_bytes": 3622295
+        }
+      }
+    }
+  ],
+  "performance_claim": null
+}

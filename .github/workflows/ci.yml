@@ -1,0 +1,65 @@
+name: CI
+
+on:
+  workflow_call:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - python-version: "3.11"
+            tox-environment: py311
+          - python-version: "3.12"
+            tox-environment: py312
+          - python-version: "3.13"
+            tox-environment: py313
+          - python-version: "3.14"
+            tox-environment: py314
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+      - name: Install tox
+        run: python -m pip install 'tox>=4,<5'
+      - name: Test this Python version
+        run: tox run -e ${{ matrix.tox-environment }}
+
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install tox
+        run: python -m pip install 'tox>=4,<5'
+      - name: Formatting, lint, type checking, and docs build
+        run: tox run -e lint,type,docs
+
+  container-e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install tox
+        run: python -m pip install 'tox>=4,<5'
+      - name: Build and consume wheel in Testcontainers
+        env:
+          STD_REQUIRE_DOCKER: "1"
+        run: tox run -e e2e

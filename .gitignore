@@ -1,0 +1,30 @@
+# Workspace-managed mounts.
+/.agents/
+/.aws/
+/.codex/
+
+# Python tooling and generated files.
+/.venv/
+/venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+/build/
+/dist/
+/.coverage
+/.coverage.*
+/htmlcov/
+/.pytest_cache/
+/.mypy_cache/
+/.ruff_cache/
+/.tox/
+
+# Documentation output.
+/.cache/
+/site/
+
+# Local secrets and environment files.
+.env
+.env.*
+!.env.example
+.kata.local.toml

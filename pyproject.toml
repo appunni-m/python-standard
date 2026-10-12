@@ -1,0 +1,127 @@
+[build-system]
+requires = ["hatchling>=1.27,<2"]
+build-backend = "hatchling.build"
+
+[project]
+name = "standard"
+version = "0.1.0"
+description = "A predictable Python utility library with an agent-first interface"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Standard contributors" }]
+keywords = ["configuration", "yaml", "toml", "pydantic", "utilities"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Typing :: Typed",
+]
+dependencies = [
+  "PyYAML>=6,<7",
+  "pydantic-settings>=2.6,<3",
+]
+
+[project.optional-dependencies]
+fastapi = ["fastapi>=0.115,<1"]
+aws = ["boto3>=1.35,<2"]
+
+[project.scripts]
+std = "std.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/std"]
+
+[tool.hatch.build.targets.wheel.force-include]
+"src/std/skills/idiomatic-python.md" = "std/skills/idiomatic-python.md"
+
+[tool.hatch.build.targets.sdist]
+only-include = ["pyproject.toml", "README.md", "LICENSE", "src/std"]
+ignore-vcs = false
+
+[tool.pytest.ini_options]
+addopts = "-ra --strict-markers"
+testpaths = ["tests"]
+pythonpath = ["src"]
+markers = [
+  "integration: tests that exercise external integration boundaries",
+  "e2e: end-to-end tests that require Docker through Testcontainers",
+]
+
+[tool.coverage.run]
+branch = true
+source = ["std"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+fail_under = 90
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+# RUF100 rejects unused noqa suppressions.
+select = ["E", "F", "I", "UP", "B", "SIM", "D1", "RUF100"]
+# Class docs own constructor and special-method contracts; test intent is carried by names/assertions.
+ignore = ["D105", "D107"]
+per-file-ignores = { "tests/**/*.py" = ["D100", "D103"] }
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+enable_error_code = ["ignore-without-code"]
+mypy_path = "src"
+packages = ["std"]
+
+[tool.tox]
+requires = ["tox>=4,<5"]
+env_list = ["py311", "py312", "py313", "py314", "lint", "type", "docs"]
+skip_missing_interpreters = true
+
+[tool.tox.env_run_base]
+package = "wheel"
+extras = ["fastapi", "aws"]
+deps = ["-r requirements-test.txt"]
+set_env = { COVERAGE_FILE = ".coverage.{env_name}" }
+commands = [["python", "-m", "coverage", "run", "-m", "pytest", "-m", "not e2e"], ["python", "-m", "coverage", "report"]]
+
+[tool.tox.env.lint]
+package = "skip"
+skip_install = true
+deps = ["ruff>=0.14,<1"]
+commands = [["python", "-m", "ruff", "format", "--check", "src", "tests", "benchmarks"], ["python", "-m", "ruff", "check", "src", "tests", "benchmarks"]]
+
+[tool.tox.env.type]
+package = "skip"
+skip_install = true
+deps = [
+  "boto3>=1.35,<2",
+  "fastapi>=0.115,<1",
+  "mypy>=1.18,<2",
+  "pydantic-settings>=2.6,<3",
+  "PyYAML>=6,<7",
+  "types-PyYAML>=6,<7",
+]
+commands = [["python", "-m", "mypy", "src/std"]]
+
+[tool.tox.env.docs]
+package = "skip"
+skip_install = true
+deps = ["zensical==0.0.69"]
+commands = [["zensical", "build", "--clean"]]
+
+[tool.tox.env.e2e]
+extras = ["fastapi", "aws"]
+deps = ["-r requirements-test.txt", "hatchling>=1.27,<2"]
+pass_env = ["STD_REQUIRE_DOCKER", "TESTCONTAINERS_RYUK_DISABLED", "TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE"]
+commands = [["python", "-m", "pytest", "-m", "e2e", "-q"]]

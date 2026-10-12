@@ -1,0 +1,253 @@
+{
+  "schema": "standard/config-benchmark@1",
+  "created_at": "2026-10-11T16:56:08.564060+00:00",
+  "command": [
+    "/home/appunni/.pyenv/versions/3.12.11/bin/python",
+    "benchmarks/configuration.py"
+  ],
+  "runtime": {
+    "python": "3.12.11 (main, Jun  7 2025, 13:59:56) [GCC 13.3.0]",
+    "implementation": "CPython",
+    "platform": "Linux-7.0.0-38-generic-x86_64-with-glibc2.39",
+    "cpu_count": 12
+  },
+  "target": {
+    "revision": "unavailable",
+    "dirty": true
+  },
+  "oracle": {
+    "name": "pydantic-settings-extra-sources",
+    "version": "0.1.0"
+  },
+  "workloads": [
+    {
+      "id": "small",
+      "sections": 20,
+      "yaml_bytes": 2640,
+      "checks": {
+        "target_matches_reference": true,
+        "target_matches_input": true,
+        "directory_merge_matches_input": true
+      },
+      "measurements": {
+        "settings_load_target": {
+          "repeats": 5,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 0.0033947029996852507,
+          "seconds_per_call_samples": [
+            0.0038145529997564154,
+            0.0033947029996852507,
+            0.0030491930001517176,
+            0.0038126230001580552,
+            0.0030386220000764297
+          ]
+        },
+        "settings_load_reference": {
+          "repeats": 5,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 0.016756423999595427,
+          "seconds_per_call_samples": [
+            0.019038935999560636,
+            0.016574864000176603,
+            0.01626553400001285,
+            0.016756423999595427,
+            0.017575734999809356
+          ]
+        },
+        "warm_lookup_10000": {
+          "repeats": 5,
+          "iterations_per_repeat": 10000,
+          "seconds_per_call_median": 6.008378099977563e-06,
+          "seconds_per_call_samples": [
+            6.254204200013191e-06,
+            6.326126200019644e-06,
+            6.008378099977563e-06,
+            5.958875900023486e-06,
+            5.311300499988647e-06
+          ]
+        },
+        "directory_merge": {
+          "repeats": 5,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 0.0038120729996080627,
+          "seconds_per_call_samples": [
+            0.0038364229999388044,
+            0.0038280939998003305,
+            0.0038120729996080627,
+            0.003789712999605399,
+            0.0037937330002932868
+          ]
+        },
+        "reload": {
+          "repeats": 5,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 0.0022484319997602142,
+          "seconds_per_call_samples": [
+            0.002518242000405735,
+            0.0022756719999961206,
+            0.002233331999832444,
+            0.0022434119996432855,
+            0.0022484319997602142
+          ]
+        },
+        "load_memory": {
+          "current_bytes": 18073,
+          "peak_bytes": 134801
+        }
+      }
+    },
+    {
+      "id": "medium",
+      "sections": 500,
+      "yaml_bytes": 67450,
+      "checks": {
+        "target_matches_reference": true,
+        "target_matches_input": true,
+        "directory_merge_matches_input": true
+      },
+      "measurements": {
+        "settings_load_target": {
+          "repeats": 5,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 0.05274756400012848,
+          "seconds_per_call_samples": [
+            0.05249323399993955,
+            0.05373777499971766,
+            0.054583794999871316,
+            0.052633174000220606,
+            0.05274756400012848
+          ]
+        },
+        "settings_load_reference": {
+          "repeats": 5,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 0.39003579600012017,
+          "seconds_per_call_samples": [
+            0.39003579600012017,
+            0.3833795509999618,
+            0.40308839599993007,
+            0.3944350400001895,
+            0.3785087860001113
+          ]
+        },
+        "warm_lookup_10000": {
+          "repeats": 5,
+          "iterations_per_repeat": 10000,
+          "seconds_per_call_median": 5.652517699991222e-06,
+          "seconds_per_call_samples": [
+            5.631720700012011e-06,
+            5.9161239000331985e-06,
+            5.441209600030561e-06,
+            5.652517699991222e-06,
+            5.829153900003803e-06
+          ]
+        },
+        "directory_merge": {
+          "repeats": 5,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 0.057223857999815664,
+          "seconds_per_call_samples": [
+            0.057223857999815664,
+            0.056317597000088426,
+            0.055848345999947924,
+            0.060097650999978214,
+            0.05911984900012612
+          ]
+        },
+        "reload": {
+          "repeats": 5,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 0.05813804799981881,
+          "seconds_per_call_samples": [
+            0.05960327000002508,
+            0.059788640000078885,
+            0.05785429800016573,
+            0.05813804799981881,
+            0.05801035900003626
+          ]
+        },
+        "load_memory": {
+          "current_bytes": 598401,
+          "peak_bytes": 3618751
+        }
+      }
+    },
+    {
+      "id": "large",
+      "sections": 3000,
+      "yaml_bytes": 414310,
+      "checks": {
+        "target_matches_reference": true,
+        "target_matches_input": true,
+        "directory_merge_matches_input": true
+      },
+      "measurements": {
+        "settings_load_target": {
+          "repeats": 5,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 0.31687300400017193,
+          "seconds_per_call_samples": [
+            0.31687300400017193,
+            0.31874099600008776,
+            0.3151670029997149,
+            0.31734063499970944,
+            0.3116741799999545
+          ]
+        },
+        "settings_load_reference": {
+          "repeats": 5,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 2.2512929160002386,
+          "seconds_per_call_samples": [
+            2.2122304950003127,
+            2.2784628899999007,
+            2.2823022420002417,
+            2.2512929160002386,
+            2.242906418000075
+          ]
+        },
+        "warm_lookup_10000": {
+          "repeats": 5,
+          "iterations_per_repeat": 10000,
+          "seconds_per_call_median": 5.346753399999215e-06,
+          "seconds_per_call_samples": [
+            5.446201599988853e-06,
+            5.394586500005971e-06,
+            5.346753399999215e-06,
+            5.318328500015923e-06,
+            5.281223399970259e-06
+          ]
+        },
+        "directory_merge": {
+          "repeats": 5,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 0.3475554589999774,
+          "seconds_per_call_samples": [
+            0.346138018000147,
+            0.3437878660001843,
+            0.3491130610000255,
+            0.3527171229998203,
+            0.3475554589999774
+          ]
+        },
+        "reload": {
+          "repeats": 5,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 0.3485701310000877,
+          "seconds_per_call_samples": [
+            0.344316376000279,
+            0.3485701310000877,
+            0.3477792989997397,
+            0.3592162989998542,
+            0.3552902860001268
+          ]
+        },
+        "load_memory": {
+          "current_bytes": 3303853,
+          "peak_bytes": 24061279
+        }
+      }
+    }
+  ],
+  "performance_claim": null
+}

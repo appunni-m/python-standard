@@ -1,0 +1,23 @@
+[project]
+site_name = "Standard"
+site_description = "A fast, predictable Python utility library with an agent-first interface."
+site_url = "https://appunni-m.github.io/python-standard/"
+docs_dir = "docs"
+site_dir = "site"
+nav = [
+  { "Start here" = "index.md" },
+  { "Get started" = "get-started.md" },
+  { "API reference" = "api.md" },
+  { "Configuration design" = "configuration/index.md" },
+  { "Configuration research" = "configuration/research.md" },
+  { "Benchmark plan" = "configuration/benchmark-plan.md" },
+  { "Testing" = "testing.md" },
+  { "Decisions" = "decisions/index.md" },
+  { "Contributing" = "contributing.md" },
+  { "Publishing docs" = "publishing.md" },
+]
+
+[project.markdown_extensions]
+pymdownx.superfences.custom_fences = [
+  { name = "mermaid", class = "mermaid", format = "pymdownx.superfences.fence_code_format" },
+]

@@ -1,0 +1,225 @@
+{
+  "schema": "standard/config-benchmark@1",
+  "created_at": "2026-10-11T16:46:16.780343+00:00",
+  "command": [
+    "/home/appunni/.pyenv/versions/3.12.11/bin/python",
+    "benchmarks/configuration.py",
+    "--repeats",
+    "3"
+  ],
+  "runtime": {
+    "python": "3.12.11 (main, Jun  7 2025, 13:59:56) [GCC 13.3.0]",
+    "implementation": "CPython",
+    "platform": "Linux-7.0.0-38-generic-x86_64-with-glibc2.39",
+    "cpu_count": 12
+  },
+  "target": {
+    "revision": "unavailable",
+    "dirty": true
+  },
+  "oracle": {
+    "name": "pydantic-settings-extra-sources",
+    "version": "0.1.0"
+  },
+  "workloads": [
+    {
+      "id": "small",
+      "sections": 20,
+      "yaml_bytes": 2640,
+      "checks": {
+        "target_matches_reference": true,
+        "target_matches_input": true,
+        "directory_merge_matches_input": true
+      },
+      "measurements": {
+        "settings_load_target": {
+          "repeats": 3,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 0.01573590600037278,
+          "seconds_per_call_samples": [
+            0.015897556000254554,
+            0.014636585000062041,
+            0.01573590600037278
+          ]
+        },
+        "settings_load_reference": {
+          "repeats": 3,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 0.01603032599996368,
+          "seconds_per_call_samples": [
+            0.014652865000243764,
+            0.01603032599996368,
+            0.016966997000054107
+          ]
+        },
+        "warm_lookup_10000": {
+          "repeats": 3,
+          "iterations_per_repeat": 10000,
+          "seconds_per_call_median": 5.4739144999985e-06,
+          "seconds_per_call_samples": [
+            5.503529599991452e-06,
+            5.4739144999985e-06,
+            5.433281499972509e-06
+          ]
+        },
+        "directory_merge": {
+          "repeats": 3,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 0.01857505800035142,
+          "seconds_per_call_samples": [
+            0.01857505800035142,
+            0.01862497899992377,
+            0.01845247900018876
+          ]
+        },
+        "reload": {
+          "repeats": 3,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 0.015822025999568723,
+          "seconds_per_call_samples": [
+            0.015972925999903964,
+            0.015822025999568723,
+            0.014865224999994098
+          ]
+        },
+        "load_memory": {
+          "current_bytes": 19105,
+          "peak_bytes": 196458
+        }
+      }
+    },
+    {
+      "id": "medium",
+      "sections": 500,
+      "yaml_bytes": 67450,
+      "checks": {
+        "target_matches_reference": true,
+        "target_matches_input": true,
+        "directory_merge_matches_input": true
+      },
+      "measurements": {
+        "settings_load_target": {
+          "repeats": 3,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 0.3811262729996088,
+          "seconds_per_call_samples": [
+            0.38749728999982835,
+            0.3811262729996088,
+            0.3665891290002037
+          ]
+        },
+        "settings_load_reference": {
+          "repeats": 3,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 0.38825029000008726,
+          "seconds_per_call_samples": [
+            0.38825029000008726,
+            0.39563265800006775,
+            0.3846214459999828
+          ]
+        },
+        "warm_lookup_10000": {
+          "repeats": 3,
+          "iterations_per_repeat": 10000,
+          "seconds_per_call_median": 5.45985449998625e-06,
+          "seconds_per_call_samples": [
+            5.429385500019635e-06,
+            5.526854500021727e-06,
+            5.45985449998625e-06
+          ]
+        },
+        "directory_merge": {
+          "repeats": 3,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 0.35759331799999927,
+          "seconds_per_call_samples": [
+            0.3634548650002216,
+            0.35759331799999927,
+            0.35514083699990806
+          ]
+        },
+        "reload": {
+          "repeats": 3,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 0.3585692999999992,
+          "seconds_per_call_samples": [
+            0.3628400849997888,
+            0.3585692999999992,
+            0.35749599900009343
+          ]
+        },
+        "load_memory": {
+          "current_bytes": 601790,
+          "peak_bytes": 5260109
+        }
+      }
+    },
+    {
+      "id": "large",
+      "sections": 3000,
+      "yaml_bytes": 414310,
+      "checks": {
+        "target_matches_reference": true,
+        "target_matches_input": true,
+        "directory_merge_matches_input": true
+      },
+      "measurements": {
+        "settings_load_target": {
+          "repeats": 3,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 2.1446683989997837,
+          "seconds_per_call_samples": [
+            2.1207999099997323,
+            2.1703291869998793,
+            2.1446683989997837
+          ]
+        },
+        "settings_load_reference": {
+          "repeats": 3,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 2.2145095239998227,
+          "seconds_per_call_samples": [
+            2.211284724000052,
+            2.2145095239998227,
+            2.2275919149997208
+          ]
+        },
+        "warm_lookup_10000": {
+          "repeats": 3,
+          "iterations_per_repeat": 10000,
+          "seconds_per_call_median": 5.457378399978552e-06,
+          "seconds_per_call_samples": [
+            5.534256500004631e-06,
+            5.457378399978552e-06,
+            5.4429134000201885e-06
+          ]
+        },
+        "directory_merge": {
+          "repeats": 3,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 2.1716123559999687,
+          "seconds_per_call_samples": [
+            2.1716123559999687,
+            2.2497275300002,
+            2.16431267400003
+          ]
+        },
+        "reload": {
+          "repeats": 3,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 2.171264013000382,
+          "seconds_per_call_samples": [
+            2.169530492999911,
+            2.171264013000382,
+            2.173093251999944
+          ]
+        },
+        "load_memory": {
+          "current_bytes": 3303813,
+          "peak_bytes": 33943336
+        }
+      }
+    }
+  ],
+  "performance_claim": null
+}

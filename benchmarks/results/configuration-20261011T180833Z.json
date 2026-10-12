@@ -1,0 +1,400 @@
+{
+  "schema": "standard/config-benchmark@2",
+  "created_at": "2026-10-11T18:08:33.922410+00:00",
+  "command": [
+    ".tox/py312/bin/python",
+    "benchmarks/configuration.py",
+    "--repeats",
+    "5"
+  ],
+  "runtime": {
+    "python": "3.12.11 (main, Jun  7 2025, 13:59:56) [GCC 13.3.0]",
+    "implementation": "CPython",
+    "platform": "Linux-7.0.0-38-generic-x86_64-with-glibc2.39",
+    "architecture": "x86_64",
+    "cpu_model": "AMD Ryzen 5 2600X Six-Core Processor",
+    "cpu_count": 12,
+    "memory_bytes": 16706703360,
+    "power_mode": null
+  },
+  "toolchain": {
+    "PyYAML": "6.0.3",
+    "pydantic": "2.14.0",
+    "pydantic-settings": "2.15.0",
+    "pydantic-settings-extra-sources": "0.1.0"
+  },
+  "target": {
+    "revision": "unavailable",
+    "dirty": true
+  },
+  "oracle": {
+    "name": "pydantic-settings-extra-sources",
+    "version": "0.1.0"
+  },
+  "workloads": [
+    {
+      "id": "small",
+      "sections": 20,
+      "yaml_bytes": 3660,
+      "input_sha256": "c8bce09159c2b6646f4b36cf8522b04e5e06e4966ffd5e736c6a1b3cfe707c71",
+      "directory_files": 7,
+      "directory_input_sha256": "275cc15cc73ddfaecde332496ae91dd40287bdf7e12a4f86edcf9df763d5c588",
+      "checks": {
+        "target_matches_reference": true,
+        "target_matches_resolved_input": true,
+        "interpolation_matches_expected": true,
+        "pydantic_validation_matches_expected": true,
+        "directory_merge_matches_input": true
+      },
+      "measurement_policy": {
+        "repeats": 5,
+        "load_order": "alternating target-reference and reference-target",
+        "concurrency": 1,
+        "cache_state": "correctness preflight followed by warm OS file cache",
+        "settings_load_boundary": "file read through validated Pydantic Settings object",
+        "interpolation_boundary": "file read through resolved immutable ConfigSnapshot",
+        "validation_boundary": "in-memory mapping through Pydantic model validation"
+      },
+      "measurements": {
+        "settings_load_target": {
+          "repeats": 5,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 0.002991540999573772,
+          "seconds_per_call_mad": 6.829999620094895e-06,
+          "seconds_per_call_samples": [
+            0.0030615619998570764,
+            0.002991540999573772,
+            0.002984710999953677,
+            0.0030516019996866817,
+            0.0029889809993619565
+          ]
+        },
+        "settings_load_reference": {
+          "repeats": 5,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 0.017532844000015757,
+          "seconds_per_call_mad": 3.7769999835290946e-05,
+          "seconds_per_call_samples": [
+            0.017495074000180466,
+            0.017532844000015757,
+            0.017731975999595306,
+            0.017410272999768495,
+            0.017570353999872168
+          ]
+        },
+        "config_manager_interpolation_load": {
+          "repeats": 5,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 0.0028794600002584048,
+          "seconds_per_call_mad": 3.663099960249383e-05,
+          "seconds_per_call_samples": [
+            0.0029160909998608986,
+            0.0028794600002584048,
+            0.0029071810004097642,
+            0.002838311000232352,
+            0.0028318399999989197
+          ]
+        },
+        "pydantic_validation_only": {
+          "repeats": 5,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 3.977000051236246e-05,
+          "seconds_per_call_mad": 2.9900002118665725e-07,
+          "seconds_per_call_samples": [
+            4.585999977280153e-05,
+            4.0749999243416823e-05,
+            3.977000051236246e-05,
+            3.9569999898958486e-05,
+            3.94710004911758e-05
+          ]
+        },
+        "warm_lookup_10000": {
+          "repeats": 5,
+          "iterations_per_repeat": 10000,
+          "seconds_per_call_median": 5.450496000048588e-06,
+          "seconds_per_call_mad": 3.733419998752661e-08,
+          "seconds_per_call_samples": [
+            5.497830199965392e-06,
+            5.487830200036115e-06,
+            5.450496000048588e-06,
+            5.446759000005841e-06,
+            5.2988894999543845e-06
+          ]
+        },
+        "directory_merge": {
+          "repeats": 5,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 0.00401937500009808,
+          "seconds_per_call_mad": 2.540000423323363e-06,
+          "seconds_per_call_samples": [
+            0.00401937500009808,
+            0.004020085000774998,
+            0.003979103999881772,
+            0.0040405150002698065,
+            0.0040168349996747565
+          ]
+        },
+        "reload": {
+          "repeats": 5,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 0.0028095710003981367,
+          "seconds_per_call_mad": 2.291100099682808e-05,
+          "seconds_per_call_samples": [
+            0.002913770000304794,
+            0.002854120999472798,
+            0.0027866599994013086,
+            0.002801020000333665,
+            0.0028095710003981367
+          ]
+        },
+        "load_memory": {
+          "current_bytes": 21653,
+          "peak_bytes": 164729
+        }
+      }
+    },
+    {
+      "id": "medium",
+      "sections": 500,
+      "yaml_bytes": 92950,
+      "input_sha256": "d103bc589e3ab111b6cfcc2ca23b0f25608b799080b0e36c085f9bcf20fb09f4",
+      "directory_files": 8,
+      "directory_input_sha256": "a791b6896562e00d239cf526c218b4204579122139e379f9af221dcfc252d8cc",
+      "checks": {
+        "target_matches_reference": true,
+        "target_matches_resolved_input": true,
+        "interpolation_matches_expected": true,
+        "pydantic_validation_matches_expected": true,
+        "directory_merge_matches_input": true
+      },
+      "measurement_policy": {
+        "repeats": 5,
+        "load_order": "alternating target-reference and reference-target",
+        "concurrency": 1,
+        "cache_state": "correctness preflight followed by warm OS file cache",
+        "settings_load_boundary": "file read through validated Pydantic Settings object",
+        "interpolation_boundary": "file read through resolved immutable ConfigSnapshot",
+        "validation_boundary": "in-memory mapping through Pydantic model validation"
+      },
+      "measurements": {
+        "settings_load_target": {
+          "repeats": 5,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 0.07306391800011625,
+          "seconds_per_call_mad": 0.00540733999969234,
+          "seconds_per_call_samples": [
+            0.07847125799980859,
+            0.0827103840001655,
+            0.06709229599982791,
+            0.07001328700062004,
+            0.07306391800011625
+          ]
+        },
+        "settings_load_reference": {
+          "repeats": 5,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 0.43251336899993476,
+          "seconds_per_call_mad": 0.005121187999975518,
+          "seconds_per_call_samples": [
+            0.43251336899993476,
+            0.42739218099995924,
+            0.4288234759997067,
+            0.4454110070000752,
+            0.44760745500025223
+          ]
+        },
+        "config_manager_interpolation_load": {
+          "repeats": 5,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 0.07006387799992808,
+          "seconds_per_call_mad": 0.00042694100011431146,
+          "seconds_per_call_samples": [
+            0.0693602950004788,
+            0.06974486600029195,
+            0.07006387799992808,
+            0.07049081900004239,
+            0.07199727399984113
+          ]
+        },
+        "pydantic_validation_only": {
+          "repeats": 5,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 0.001021793000290927,
+          "seconds_per_call_mad": 2.769000275293365e-06,
+          "seconds_per_call_samples": [
+            0.0010296740001649596,
+            0.0010190240000156336,
+            0.001021793000290927,
+            0.0010187340003540157,
+            0.0010236340003757505
+          ]
+        },
+        "warm_lookup_10000": {
+          "repeats": 5,
+          "iterations_per_repeat": 10000,
+          "seconds_per_call_median": 5.7661181999719705e-06,
+          "seconds_per_call_mad": 1.8600679995870513e-07,
+          "seconds_per_call_samples": [
+            5.580111400013265e-06,
+            5.9207066999988456e-06,
+            5.7661181999719705e-06,
+            6.099229400024342e-06,
+            5.313096499958192e-06
+          ]
+        },
+        "directory_merge": {
+          "repeats": 5,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 0.07199194500026351,
+          "seconds_per_call_mad": 0.0008046929997362895,
+          "seconds_per_call_samples": [
+            0.07085802999972657,
+            0.07199194500026351,
+            0.07172635299957619,
+            0.0727966379999998,
+            0.072894088000794
+          ]
+        },
+        "reload": {
+          "repeats": 5,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 0.07206094499997562,
+          "seconds_per_call_mad": 0.00047964199984562583,
+          "seconds_per_call_samples": [
+            0.07158130300012999,
+            0.07206094499997562,
+            0.07346161999976175,
+            0.071829364000223,
+            0.07408865199977299
+          ]
+        },
+        "load_memory": {
+          "current_bytes": 684733,
+          "peak_bytes": 4102807
+        }
+      }
+    },
+    {
+      "id": "large",
+      "sections": 3000,
+      "yaml_bytes": 567310,
+      "input_sha256": "84c47e691204300946ac9d1f05463f16c73af4c02b3ac42b8145518fca3975ec",
+      "directory_files": 8,
+      "directory_input_sha256": "190a2e5e0263fff98434d5805c558172118172d6f55c04050dfa16bda2161223",
+      "checks": {
+        "target_matches_reference": true,
+        "target_matches_resolved_input": true,
+        "interpolation_matches_expected": true,
+        "pydantic_validation_matches_expected": true,
+        "directory_merge_matches_input": true
+      },
+      "measurement_policy": {
+        "repeats": 5,
+        "load_order": "alternating target-reference and reference-target",
+        "concurrency": 1,
+        "cache_state": "correctness preflight followed by warm OS file cache",
+        "settings_load_boundary": "file read through validated Pydantic Settings object",
+        "interpolation_boundary": "file read through resolved immutable ConfigSnapshot",
+        "validation_boundary": "in-memory mapping through Pydantic model validation"
+      },
+      "measurements": {
+        "settings_load_target": {
+          "repeats": 5,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 0.5338112079998609,
+          "seconds_per_call_mad": 0.015975078000337817,
+          "seconds_per_call_samples": [
+            0.5224805589996322,
+            0.5178361299995231,
+            0.5962888080002813,
+            0.5920980820001205,
+            0.5338112079998609
+          ]
+        },
+        "settings_load_reference": {
+          "repeats": 5,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 2.72374771900013,
+          "seconds_per_call_mad": 0.01809387399953266,
+          "seconds_per_call_samples": [
+            2.72374771900013,
+            2.7718767140004275,
+            2.8539108909999413,
+            2.7056538450005974,
+            2.7195971419996567
+          ]
+        },
+        "config_manager_interpolation_load": {
+          "repeats": 5,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 0.4337555299998712,
+          "seconds_per_call_mad": 0.0011639539998213877,
+          "seconds_per_call_samples": [
+            0.4337555299998712,
+            0.4325915760000498,
+            0.43955303100028686,
+            0.43357416999970155,
+            0.43802023500029463
+          ]
+        },
+        "pydantic_validation_only": {
+          "repeats": 5,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 0.006498794000435737,
+          "seconds_per_call_mad": 9.029999091580976e-06,
+          "seconds_per_call_samples": [
+            0.00649605399939901,
+            0.006575014999725681,
+            0.006466333000389568,
+            0.006507823999527318,
+            0.006498794000435737
+          ]
+        },
+        "warm_lookup_10000": {
+          "repeats": 5,
+          "iterations_per_repeat": 10000,
+          "seconds_per_call_median": 5.38250869994954e-06,
+          "seconds_per_call_mad": 2.0486999892455102e-08,
+          "seconds_per_call_samples": [
+            5.432253900016803e-06,
+            5.3852596999604426e-06,
+            5.38250869994954e-06,
+            5.362021700057085e-06,
+            5.35733260003326e-06
+          ]
+        },
+        "directory_merge": {
+          "repeats": 5,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 0.41868826399968384,
+          "seconds_per_call_mad": 0.0014552550001099007,
+          "seconds_per_call_samples": [
+            0.41868826399968384,
+            0.4193138959999487,
+            0.41723300899957394,
+            0.4162304850005967,
+            0.42194576600013534
+          ]
+        },
+        "reload": {
+          "repeats": 5,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 0.43913346899989847,
+          "seconds_per_call_mad": 0.0029585719994429382,
+          "seconds_per_call_samples": [
+            0.43551359599950956,
+            0.4420920409993414,
+            0.4422640410002714,
+            0.43913346899989847,
+            0.4377843649999704
+          ]
+        },
+        "load_memory": {
+          "current_bytes": 3666853,
+          "peak_bytes": 26393279
+        }
+      }
+    }
+  ],
+  "performance_claim": null
+}

@@ -1,0 +1,331 @@
+{
+  "schema": "standard/config-benchmark@1",
+  "created_at": "2026-10-11T17:19:45.641518+00:00",
+  "command": [
+    "/home/appunni/.pyenv/versions/3.12.11/bin/python",
+    "benchmarks/configuration.py"
+  ],
+  "runtime": {
+    "python": "3.12.11 (main, Jun  7 2025, 13:59:56) [GCC 13.3.0]",
+    "implementation": "CPython",
+    "platform": "Linux-7.0.0-38-generic-x86_64-with-glibc2.39",
+    "cpu_count": 12
+  },
+  "target": {
+    "revision": "unavailable",
+    "dirty": true
+  },
+  "oracle": {
+    "name": "pydantic-settings-extra-sources",
+    "version": "0.1.0"
+  },
+  "workloads": [
+    {
+      "id": "small",
+      "sections": 20,
+      "yaml_bytes": 3660,
+      "checks": {
+        "target_matches_reference": true,
+        "target_matches_resolved_input": true,
+        "interpolation_matches_expected": true,
+        "pydantic_validation_matches_expected": true,
+        "directory_merge_matches_input": true
+      },
+      "measurements": {
+        "settings_load_target": {
+          "repeats": 5,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 0.0037919179994787555,
+          "seconds_per_call_samples": [
+            0.003717956999935268,
+            0.0038474670000141487,
+            0.003905517999555741,
+            0.0037919179994787555,
+            0.0037461570000232314
+          ]
+        },
+        "settings_load_reference": {
+          "repeats": 5,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 0.018901126999480766,
+          "seconds_per_call_samples": [
+            0.01905524699941452,
+            0.018928917000266665,
+            0.018901126999480766,
+            0.01849385399964376,
+            0.018224133999865444
+          ]
+        },
+        "config_manager_interpolation_load": {
+          "repeats": 5,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 0.003436104999309464,
+          "seconds_per_call_samples": [
+            0.0033621150005274103,
+            0.0033437160000175936,
+            0.003436104999309464,
+            0.003615857000113465,
+            0.003591857000174059
+          ]
+        },
+        "pydantic_validation_only": {
+          "repeats": 5,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 4.6020999434404075e-05,
+          "seconds_per_call_samples": [
+            5.287000021780841e-05,
+            4.687999989982927e-05,
+            4.601000000548083e-05,
+            4.6020999434404075e-05,
+            4.5649999265151564e-05
+          ]
+        },
+        "warm_lookup_10000": {
+          "repeats": 5,
+          "iterations_per_repeat": 10000,
+          "seconds_per_call_median": 5.603507600062585e-06,
+          "seconds_per_call_samples": [
+            5.601180600024236e-06,
+            5.662638000012521e-06,
+            5.603507600062585e-06,
+            5.3910257000097775e-06,
+            5.7074021999142135e-06
+          ]
+        },
+        "directory_merge": {
+          "repeats": 5,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 0.005364444999941043,
+          "seconds_per_call_samples": [
+            0.005401614999755111,
+            0.005372235000322689,
+            0.005347934000383248,
+            0.005364444999941043,
+            0.005322854000041843
+          ]
+        },
+        "reload": {
+          "repeats": 5,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 0.0035256760002084775,
+          "seconds_per_call_samples": [
+            0.0035102060001008795,
+            0.003497426000649284,
+            0.003573975999643153,
+            0.003549076000126661,
+            0.0035256760002084775
+          ]
+        },
+        "load_memory": {
+          "current_bytes": 21653,
+          "peak_bytes": 164729
+        }
+      }
+    },
+    {
+      "id": "medium",
+      "sections": 500,
+      "yaml_bytes": 92950,
+      "checks": {
+        "target_matches_reference": true,
+        "target_matches_resolved_input": true,
+        "interpolation_matches_expected": true,
+        "pydantic_validation_matches_expected": true,
+        "directory_merge_matches_input": true
+      },
+      "measurements": {
+        "settings_load_target": {
+          "repeats": 5,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 0.07780764600011025,
+          "seconds_per_call_samples": [
+            0.07719196400012152,
+            0.07912081199992826,
+            0.0782369580001614,
+            0.07780764600011025,
+            0.07752309499937837
+          ]
+        },
+        "settings_load_reference": {
+          "repeats": 5,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 0.42566838600032497,
+          "seconds_per_call_samples": [
+            0.42462744299973565,
+            0.42589808699995046,
+            0.42566838600032497,
+            0.4279151749997254,
+            0.4206934519997958
+          ]
+        },
+        "config_manager_interpolation_load": {
+          "repeats": 5,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 0.08019558599971788,
+          "seconds_per_call_samples": [
+            0.08065650800017465,
+            0.08034660699922824,
+            0.08019558599971788,
+            0.08000352599992766,
+            0.08009588500044629
+          ]
+        },
+        "pydantic_validation_only": {
+          "repeats": 5,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 0.0010451650005052215,
+          "seconds_per_call_samples": [
+            0.0010529549999773735,
+            0.0010449239998706616,
+            0.0010434550003992626,
+            0.0010451650005052215,
+            0.0010503949997655582
+          ]
+        },
+        "warm_lookup_10000": {
+          "repeats": 5,
+          "iterations_per_repeat": 10000,
+          "seconds_per_call_median": 5.3900406000138904e-06,
+          "seconds_per_call_samples": [
+            5.541066299974773e-06,
+            5.4452968999612495e-06,
+            5.3900406000138904e-06,
+            5.384840600072494e-06,
+            5.3867596000600316e-06
+          ]
+        },
+        "directory_merge": {
+          "repeats": 5,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 0.08091509899986704,
+          "seconds_per_call_samples": [
+            0.08073345800039533,
+            0.08091509899986704,
+            0.08093041899974196,
+            0.08147149199976411,
+            0.0808131379999395
+          ]
+        },
+        "reload": {
+          "repeats": 5,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 0.08087805000013759,
+          "seconds_per_call_samples": [
+            0.08127221099948656,
+            0.0796179540002413,
+            0.08095286899970233,
+            0.08002633500018419,
+            0.08087805000013759
+          ]
+        },
+        "load_memory": {
+          "current_bytes": 684733,
+          "peak_bytes": 4102807
+        }
+      }
+    },
+    {
+      "id": "large",
+      "sections": 3000,
+      "yaml_bytes": 567310,
+      "checks": {
+        "target_matches_reference": true,
+        "target_matches_resolved_input": true,
+        "interpolation_matches_expected": true,
+        "pydantic_validation_matches_expected": true,
+        "directory_merge_matches_input": true
+      },
+      "measurements": {
+        "settings_load_target": {
+          "repeats": 5,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 0.47187048900013906,
+          "seconds_per_call_samples": [
+            0.46575579500040476,
+            0.47075565599971014,
+            0.47197498199966503,
+            0.47187048900013906,
+            0.47344870699998864
+          ]
+        },
+        "settings_load_reference": {
+          "repeats": 5,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 2.592150486000719,
+          "seconds_per_call_samples": [
+            2.589530664999984,
+            2.633878210000148,
+            2.592150486000719,
+            2.6067008459995122,
+            2.5761925060005524
+          ]
+        },
+        "config_manager_interpolation_load": {
+          "repeats": 5,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 0.503135895000014,
+          "seconds_per_call_samples": [
+            0.503135895000014,
+            0.5041622480002843,
+            0.5020749079994857,
+            0.503073220999795,
+            0.5116169990005801
+          ]
+        },
+        "pydantic_validation_only": {
+          "repeats": 5,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 0.007183212000200001,
+          "seconds_per_call_samples": [
+            0.006719369999700575,
+            0.008055666000473138,
+            0.0074103329998251866,
+            0.007183212000200001,
+            0.0066909500001202105
+          ]
+        },
+        "warm_lookup_10000": {
+          "repeats": 5,
+          "iterations_per_repeat": 10000,
+          "seconds_per_call_median": 5.4867724999894565e-06,
+          "seconds_per_call_samples": [
+            5.583070000011503e-06,
+            5.523705699943093e-06,
+            5.4867724999894565e-06,
+            5.4585494000093605e-06,
+            5.457645400019829e-06
+          ]
+        },
+        "directory_merge": {
+          "repeats": 5,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 0.522608857000705,
+          "seconds_per_call_samples": [
+            0.513208315999691,
+            0.522608857000705,
+            0.5279796790000546,
+            0.5261205409997274,
+            0.5162115849998372
+          ]
+        },
+        "reload": {
+          "repeats": 5,
+          "iterations_per_repeat": 1,
+          "seconds_per_call_median": 0.5170208719991933,
+          "seconds_per_call_samples": [
+            0.5170208719991933,
+            0.5190864799997144,
+            0.5267029629994795,
+            0.5076485359995786,
+            0.508718220999981
+          ]
+        },
+        "load_memory": {
+          "current_bytes": 3666901,
+          "peak_bytes": 26393279
+        }
+      }
+    }
+  ],
+  "performance_claim": null
+}
