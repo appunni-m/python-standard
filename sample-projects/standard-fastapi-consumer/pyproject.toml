@@ -9,7 +9,7 @@ description = "An independently assembled FastAPI consumer sample for Standard"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
-  "standard[fastapi]==0.2.3",
+  "standard[fastapi]==0.2.4",
   "uvicorn>=0.30,<1",
 ]
 

@@ -3,7 +3,7 @@
 `standard-cache` provides `std.cache` without adding Redis dependencies to the
 core `standard` installation.
 
-The current coordinated release is `0.2.3`. Install the provider directly or
+The current coordinated release is `0.2.4`. Install the provider directly or
 select it with the `standard[cache]` extra.
 
 ## Install

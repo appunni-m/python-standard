@@ -4,14 +4,15 @@ User-visible changes for the `standard` distribution and its five optional
 providers are listed here. All six distributions share a release version. See
 the [publishing guide](publishing.md) for the package map and release workflow.
 
-## Unreleased
+## 0.2.4
 
-- Refresh the project, release, package, and testing documentation to match the
-  coordinated `0.2.3` release.
-- Update the packaged idiomatic-Python skill to describe the released core and
-  provider layout.
-- Add an independently assembled FastAPI consumer example and evaluation
-  evidence.
+- Correct the packaged idiomatic-Python skill to describe `std.service` as a
+  released core API.
+- Add regression coverage for the skill in source and built-wheel consumer
+  tests.
+- Add a fresh FastAPI consumer sample and update documentation to reflect the
+  coordinated release and tested consumer workflow.
+- Publish the core package and all five providers from the `v0.2.4` tag.
 
 ## 0.2.0–0.2.3
 
@@ -32,7 +33,9 @@ first application tooling:
 - Document the configuration merge, interpolation, precedence, error, and
   immutable-snapshot contracts.
 
-The latest coordinated release is `0.2.3`.
+The `0.2.3` core wheel's packaged skill incorrectly described `std.service` as
+unreleased. That historical artifact remains unchanged; the guidance is
+corrected in `0.2.4` and guarded by regression tests.
 
 ## 0.1.1
 

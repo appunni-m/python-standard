@@ -1,7 +1,7 @@
 # Standard FastAPI consumer sample
 
 This is a small, independently assembled order API that exercises the published
-Standard `0.2.3` artifact and its FastAPI integration. It uses feature-local
+Standard `0.2.4` artifact and its FastAPI integration. It uses feature-local
 routes, schemas, domain models, repositories, settings, and services. `main.py`
 is the composition root; the only settings construction sites are in that
 module, and each startup path constructs one `Settings` instance.
@@ -24,7 +24,7 @@ make run
 ```
 
 The API listens at `http://127.0.0.1:8000` by default. The sample pins
-`standard[fastapi]==0.2.3`; pip resolves the published core and matching FastAPI
+`standard[fastapi]==0.2.4`; pip resolves the published core and matching FastAPI
 integration distributions from the configured package index.
 
 ## Example API

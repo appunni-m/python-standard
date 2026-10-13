@@ -14,7 +14,7 @@ python -m pip install 'standard[rdbms]'
 python -m pip install 'standard[fastapi,aws,http,cache,rdbms]'
 ```
 
-The current coordinated release is `0.2.3`. The core distribution does not
+The current coordinated release is `0.2.4`. The core distribution does not
 install optional integration packages unless you select an extra. You can also
 install one provider directly with `python -m pip install standard-fastapi`.
 
@@ -135,10 +135,11 @@ std skill install
 
 The skill install command writes `.agents/skills/standard-idiomatic-python/SKILL.md` by default. The directory name matches the skill's required Agent Skills metadata. The command refuses to replace an existing file; pass `--force` to replace it or give another destination path. See the [CLI reference](api.md#agent-cli).
 
-**Known issue in the published `0.2.3` package:** its installed skill contains
-one stale sentence that describes `std.service` as unreleased, although
-`std guide` correctly lists `std.service` as part of core. The source skill in
-this repository is corrected; the PyPI copy will update with a future release.
+**Resolved in `0.2.4`:** the `0.2.3` package's installed skill contained one
+stale sentence that described `std.service` as unreleased, although `std guide`
+listed it as part of core. The `0.2.4` package corrects that sentence and its
+published skill was verified after installation. See [testing](testing.md) for
+the release-artifact evidence.
 
 ## Current status
 
@@ -149,7 +150,7 @@ this repository is corrected; the PyPI copy will update with a future release.
 | Python versions | CPython 3.11–3.14 are declared and configured in tox and CI |
 | Test and benchmark commands | Unit, parity, Testcontainers consumer, and benchmark workflows are configured; see [testing](testing.md) for local evidence and environment limits |
 | Documentation site | Zensical source and a GitHub Pages workflow are configured |
-| PyPI | The current coordinated release is `0.2.3`; all six distributions share that version. |
+| PyPI | The current coordinated release is `0.2.4`; all six distributions share that version. |
 | Hosted docs | Live at [appunni-m.github.io/python-standard](https://appunni-m.github.io/python-standard/); pushes to `main` deploy updates |
 | Security reporting | GitHub private vulnerability reporting is enabled; use the **Report a vulnerability** button on the [Security Advisories page](https://github.com/appunni-m/python-standard/security/advisories) |
 

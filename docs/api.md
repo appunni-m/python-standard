@@ -17,7 +17,7 @@
 | `std.cache` | `standard-cache` or `standard[cache]` | Redis client, sync/async cache decorators, and distributed locks |
 | `std.rdbms` | `standard-rdbms` or `standard[rdbms]` | Async SQLAlchemy database managers for SQLite, PostgreSQL, and MySQL |
 
-The current coordinated release is `0.2.3`; each integration has its own
+The current coordinated release is `0.2.4`; each integration has its own
 distribution and matching convenience extra. Install `standard` for core APIs,
 then select only the provider packages your application uses. From a checkout,
 install core plus the relevant `packages/standard-*` project in editable mode.

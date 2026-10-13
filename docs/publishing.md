@@ -11,8 +11,8 @@ The generated site is written to `site/` and is excluded from Git.
 
 ## Current release status
 
-The latest coordinated release is `v0.2.3`. It publishes the core package and
-all five integration distributions at version `0.2.3` from one annotated tag.
+The latest coordinated release is `v0.2.4`. It publishes the core package and
+all five integration distributions at version `0.2.4` from one annotated tag.
 The release workflow uses PyPI Trusted Publishing and creates one GitHub
 release containing the distributions and checksum manifest.
 
@@ -42,7 +42,7 @@ The live Pages URL, `https://appunni-m.github.io/python-standard/`, matches `sit
 
 ## Published distribution
 
-The coordinated `v0.2.3` release includes the standalone integration packages.
+The coordinated `v0.2.4` release includes the standalone integration packages.
 The earlier `0.1.1` artifact bundled FastAPI and AWS in the core package; use
 the current extras or direct provider package names above for new installs.
 
@@ -50,7 +50,7 @@ the current extras or direct provider package names above for new installs.
 
 The release workflow at `.github/workflows/release.yml` uses PyPI Trusted
 Publishing through GitHub's OIDC identity. It does not need a long-lived
-`PYPI_TOKEN` secret. The shared `v0.2.3` release uses the publisher identity
+`PYPI_TOKEN` secret. The shared `v0.2.4` release uses the publisher identity
 below for each of the six projects.
 
 ### Publisher fields
@@ -79,12 +79,12 @@ ownership are:
 
 | PyPI project | Python import | Contents | Publisher status |
 | --- | --- | --- | --- |
-| `standard` | `std` | Core utilities, configuration, logging, CLI, and skill. | Published at `0.2.3`. |
-| `standard-fastapi` | `std.fastapi` | FastAPI integration. | Published at `0.2.3`. |
-| `standard-aws` | `std.aws` | AWS integration. | Published at `0.2.3`. |
-| `standard-http` | `std.http` | HTTP client and authentication helpers. | Published at `0.2.3`. |
-| `standard-cache` | `std.cache` | Redis client, caching decorators, and locks. | Published at `0.2.3`. |
-| `standard-rdbms` | `std.rdbms` | Relational database configuration and session helpers. | Published at `0.2.3`. |
+| `standard` | `std` | Core utilities, configuration, logging, CLI, and skill. | Published at `0.2.4`. |
+| `standard-fastapi` | `std.fastapi` | FastAPI integration. | Published at `0.2.4`. |
+| `standard-aws` | `std.aws` | AWS integration. | Published at `0.2.4`. |
+| `standard-http` | `std.http` | HTTP client and authentication helpers. | Published at `0.2.4`. |
+| `standard-cache` | `std.cache` | Redis client, caching decorators, and locks. | Published at `0.2.4`. |
+| `standard-rdbms` | `std.rdbms` | Relational database configuration and session helpers. | Published at `0.2.4`. |
 
 The five providers are optional runtime dependencies. Installing core does not
 install or import them unless an application selects the relevant extra.
@@ -140,7 +140,7 @@ core wheel has an explicit allow-list, and each add-on wheel owns only its
 ### GitHub environment setup
 
 The `pypi` environment is configured and was used for the coordinated
-`v0.2.3` release. Each of the six projects must retain a Trusted Publisher for
+`v0.2.4` release. Each of the six projects must retain a Trusted Publisher for
 `release.yml` and the `pypi` environment. If repository protection rules or
 the environment name change, update the publisher entries to match.
 

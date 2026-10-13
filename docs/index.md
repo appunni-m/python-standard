@@ -28,6 +28,6 @@ The application pattern keeps settings, routes, schemas, data models, repositori
 
 ### Current release
 
-The latest coordinated release is `v0.2.3`. It includes `standard` and five provider distributions at the same version. Installing `standard` alone gives you the core modules; install an extra such as `standard[fastapi]` to add an integration. See [publishing](publishing.md) for package links and the tag-based release process. The documentation site is published through [GitHub Pages](https://appunni-m.github.io/python-standard/). Configuration benchmark records are exploratory and do not demonstrate the 100× target.
+The latest coordinated release is `v0.2.4`. It includes `standard` and five provider distributions at the same version. Installing `standard` alone gives you the core modules; install an extra such as `standard[fastapi]` to add an integration. See [publishing](publishing.md) for package links and the tag-based release process. The documentation site is published through [GitHub Pages](https://appunni-m.github.io/python-standard/). Configuration benchmark records are exploratory and do not demonstrate the 100× target.
 
 Keep configuration errors and source precedence explicit, keep optional integrations out of the core install, and measure equivalent work before making performance claims.

@@ -23,8 +23,8 @@ The package metadata keeps each runtime integration independent. The Testcontain
 | `standard[rdbms]` | `-e . -e packages/standard-rdbms` | `standard-rdbms`, SQLAlchemy, and async drivers |
 | `standard[fastapi,aws,http,cache,rdbms]` | Core plus all five local add-on projects | All add-on distributions and their dependencies |
 
-The latest coordinated release is `v0.2.3`; all six distributions use version
-`0.2.3`. The repository's Testcontainers suite validates built wheels and
+The latest coordinated release is `v0.2.4`; all six distributions use version
+`0.2.4`. The repository's Testcontainers suite validates built wheels and
 clean consumer installs from the current source. The independent example in
 [`sample-projects/standard-fastapi-consumer`](https://github.com/appunni-m/python-standard/tree/main/sample-projects/standard-fastapi-consumer)
 adds an application-level check of the public API and project conventions.
@@ -36,9 +36,27 @@ them into isolated CPython 3.12 virtual environments. Core-only, each single
 extra, and all extras together passed `pip check`. Core-only did not expose
 provider namespaces; each single extra exposed only its selected namespace;
 the combined install exposed all five. `std --version` reported `std 0.2.3`,
-and `std guide --format json` returned schema version `1`. This smoke check
-covers package metadata, imports, and CLI startup, not external service
-behavior; the Testcontainers suite covers service-backed scenarios.
+and `std guide --format json` returned schema version `1`. This historical
+smoke check covers package metadata, imports, and CLI startup, not external
+service behavior.
+
+The `0.2.3` core wheel also exposed a stale packaged-skill statement that
+called `std.service` unreleased. This was fixed in `0.2.4` and is guarded by
+source and built-wheel regression tests. On 2026-10-13, a fresh CPython 3.12.11
+consumer environment installed `standard[fastapi]==0.2.4` from PyPI. `pip
+check` passed; `std --version` reported `std 0.2.4`; the JSON guide listed
+`std.service` as core and `std.fastapi` as `extra:fastapi`; and the installed
+skill contained the `std.service` guidance without the stale unreleased claim.
+The full sample check passed: four tests, Ruff format and lint, and strict
+mypy. See the [consumer evaluation](https://github.com/appunni-m/python-standard/blob/main/sample-projects/standard-fastapi-consumer/EVALUATION.md)
+for exact commands and scope.
+
+The `v0.2.4` tag published all six distributions, each with a wheel and source
+archive. The [GitHub release](https://github.com/appunni-m/python-standard/releases/tag/v0.2.4)
+contains the artifacts and `SHA256SUMS`. The [release workflow run](https://github.com/appunni-m/python-standard/actions/runs/38351897836)
+completed the preflight, build, PyPI publish, attestation, and GitHub release
+jobs successfully. This artifact smoke check covers metadata, imports, CLI,
+and the installed skill; it does not replace the Testcontainers service tests.
 
 ## Layers
 
