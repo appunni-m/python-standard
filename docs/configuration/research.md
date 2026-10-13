@@ -18,7 +18,11 @@ This survey identifies useful approaches to study. It does not rank the projects
 - Match the reference package's documented feature set; differentiate through clear semantics, edge-case correctness, and measured performance.
 - Performance comparisons must use the same config shape, precedence, interpolation, validation, and output guarantees.
 - The requested `pydantic-settings-extra-sources` package is the compatibility reference, not a dependency. Its exact source archive has been inspected; the adopted behavior and edge-case decisions are summarized in the [configuration contract](index.md).
-- PyPI lists `standard` 0.1.1 under maintainer `appunni-m`; fresh installs of the base package and all existing extras passed on 2026-10-12. Those checks cover the published artifact, which still bundles integration modules. The unreleased source splits integrations into separate distributions that share one tag-derived version; see [publishing](../publishing.md) for the workflow and publisher status.
+- The current source and release records use one shared `vX.Y.Z` tag for the
+  core and all five integrations. The latest coordinated release is `0.2.3`;
+  see [publishing](../publishing.md) for package names, extras, and release
+  verification. This does not change the configuration compatibility
+  reference or make the reference package a runtime dependency.
 
 ## Closer look at the provided 0.1.0 source archive
 

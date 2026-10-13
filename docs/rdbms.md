@@ -6,10 +6,12 @@ SQLAlchemy's asyncio extension.
 
 ## Install
 
-When the integration has been published, install it with:
+Install the provider directly, or use the `standard[rdbms]` convenience extra:
 
 ```console
 python -m pip install standard-rdbms
+# or
+python -m pip install 'standard[rdbms]'
 ```
 
 The package has its own dependencies and can be built independently from the

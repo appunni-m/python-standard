@@ -1,26 +1,48 @@
 # Changelog
 
-This file records user-visible changes. The repository version can be newer than the latest version published on PyPI; see the [publishing guide](publishing.md) for the current release state.
+User-visible changes for the `standard` distribution and its five optional
+providers are listed here. All six distributions share a release version. See
+the [publishing guide](publishing.md) for the package map and release workflow.
 
-## Unreleased (next planned release: `v0.2.0`)
+## Unreleased
 
-- Add `std.service.Service` and `BackgroundService` lifecycle management, health checks, state reporting, graceful shutdown, and cancellation handling.
-- Complete `standard-fastapi` with validated app configuration, injected lifespan management, API-token auth, health checks, and structured request logging.
-- Add `std.logging` with development/test console defaults, staging/production JSON output, stdout/stderr selection, severity overrides, structured context fields, and custom standard-library formatter support.
-- Move FastAPI and AWS integration code into independently built `standard-fastapi` and `standard-aws` projects while keeping core and the `std` CLI in `standard`.
-- Point the `fastapi` and `aws` convenience extras at their add-on distributions, and verify their installation from built wheels in the Testcontainers consumer suite.
-- Derive all six distribution versions from one annotated `vX.Y.Z` tag and publish them through one coordinated Trusted Publishing workflow.
-- Add independently built `standard-http`, `standard-cache`, and `standard-rdbms` distributions under `std.http`, `std.cache`, and `std.rdbms`, with focused guides and Testcontainers-backed service coverage.
-- Add `http`, `cache`, and `rdbms` convenience extras and clean wheel-install coverage; pin all cross-project requirements to the shared release version during the release build.
-- Update the CLI guide, idiomatic-Python skill, docs, and templates for the standalone package layout.
-- Continue the feature-first application template, YAML settings, dependency injection, route/service, and background lifecycle guidance.
+- Refresh the project, release, package, and testing documentation to match the
+  coordinated `0.2.3` release.
+- Update the packaged idiomatic-Python skill to describe the released core and
+  provider layout.
+- Add an independently assembled FastAPI consumer example and evaluation
+  evidence.
+
+## 0.2.0–0.2.3
+
+The coordinated 0.2.x releases establish the modular package layout and agent-
+first application tooling:
+
+- Keep configuration, logging, utility helpers, async services, the `std` CLI,
+  and the packaged idiomatic-Python skill in the `standard` core distribution.
+- Publish FastAPI, AWS, HTTP, Redis cache, and relational database integrations
+  as separate distributions under `std.fastapi`, `std.aws`, `std.http`,
+  `std.cache`, and `std.rdbms`.
+- Add the `fastapi`, `aws`, `http`, `cache`, and `rdbms` convenience extras to
+  install each matching provider.
+- Derive every distribution version from one annotated `vX.Y.Z` tag and build
+  all six packages in the same release workflow.
+- Add environment-aware logging presets, async service lifecycle management,
+  Testcontainers consumer coverage, and a feature-first FastAPI template.
+- Document the configuration merge, interpolation, precedence, error, and
+  immutable-snapshot contracts.
+
+The latest coordinated release is `0.2.3`.
 
 ## 0.1.1
 
-- Publish the `standard` distribution through GitHub Actions Trusted Publishing.
-- Keep the FastAPI and AWS import modules bundled in this release; the distribution split is part of the unreleased 0.2.0 source.
+- Publish the `standard` distribution through GitHub Actions Trusted
+  Publishing.
+- Include FastAPI and AWS modules inside the core distribution before the
+  integration package split.
 
 ## 0.1.0
 
 - Initial PyPI release of the `standard` distribution, imported as `std`.
-- Provide YAML/TOML configuration and Pydantic Settings support, collection and file helpers, the `std` agent CLI, and optional FastAPI and AWS integrations.
+- Provide YAML/TOML configuration and Pydantic Settings support, collection and
+  file helpers, the `std` agent CLI, and optional FastAPI and AWS integrations.

@@ -73,17 +73,19 @@ there.
 - The core distribution is `standard`; Python imports and the executable are
   named `std`. Core capabilities, the CLI, and the skill stay in `standard`;
   do not create separate `standard-core` or `standard-cli` distributions.
-- The integration distributions are `standard-fastapi` (`std.fastapi`) and
-  `standard-aws` (`std.aws`), with `standard-http` (`std.http`),
-  `standard-cache` (`std.cache`), and `standard-rdbms` (`std.rdbms`) planned.
-  Core extras `fastapi` and `aws` select their standalone distributions in the
-  0.2.0 source. Add later extras only with an implemented provider. Core code
-  must not import integration packages or their dependencies. PyPI 0.1.1 still
-  bundles FastAPI and AWS; do not claim the split is released until artifacts
-  and clean installs prove it.
-- PyPI availability and publisher setup for all add-on project names are
-  unverified. Design each API and dependency boundary before creating its
-  distribution or workflow.
+- The integration distributions are `standard-fastapi` (`std.fastapi`),
+  `standard-aws` (`std.aws`), `standard-http` (`std.http`),
+  `standard-cache` (`std.cache`), and `standard-rdbms` (`std.rdbms`). Core
+  extras select their standalone distributions. All six packages share one
+  version derived from the release tag. The [publishing guide](docs/publishing.md)
+  and [testing guide](docs/testing.md) record current artifact status and
+  verification. Re-run clean installs after release metadata or dependency
+  changes. Core code must not import
+  integration packages or their dependencies.
+- The six package names, APIs, and publisher workflows are already established.
+  For a new integration, first design its API and dependency boundary, then
+  add the provider distribution, core extra, docs, tests, and release workflow
+  coverage together.
 - Core contains configuration, `std.logging`, utility helpers, `Service`, and
   `BackgroundService(Service)`, as well as the `std` CLI and packaged skill.
   Track service lifecycle contracts and verify them before release. For

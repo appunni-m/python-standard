@@ -3,14 +3,15 @@
 `standard-cache` provides `std.cache` without adding Redis dependencies to the
 core `standard` installation.
 
-The source package is built and tested. PyPI availability and trusted publisher
-setup for this add-on have not been verified; use the install command below
-after a release is published.
+The current coordinated release is `0.2.3`. Install the provider directly or
+select it with the `standard[cache]` extra.
 
 ## Install
 
 ```console
 python -m pip install standard-cache
+# or
+python -m pip install 'standard[cache]'
 ```
 
 ## Connect and close

@@ -11,7 +11,7 @@ records the component boundaries and why they are used.
 | --- | --- | --- |
 | Distribution and import | The core PyPI distribution is `standard`; Python imports and the executable are named `std`. The CLI, skill, configuration, logging, and utility modules remain in `standard`. | Keep install, import, and executable names explicit. Do not split core or CLI into separate projects. |
 | Core capability direction | The `standard` core includes configuration, logging, `Service`, `BackgroundService(Service)`, utility helpers, the `std` CLI, and packaged agent guidance. | Core owns shared lifecycle abstractions; the async service contract is implemented in `std.service` and covered by lifecycle tests. |
-| Integration boundary | Publish independent distributions for FastAPI, AWS, HTTP, cache, and RDBMS, each under `std.<integration>`. Core extras select the matching providers. | Each integration distribution owns its subpackage and runtime dependencies; core must not import integration code. PyPI 0.1.1 still bundles FastAPI and AWS. The unreleased source now separates all five integrations. |
+| Integration boundary | Publish independent distributions for FastAPI, AWS, HTTP, cache, and RDBMS, each under `std.<integration>`. Core extras select the matching providers. | Each integration distribution owns its subpackage and runtime dependencies; core must not import integration code. All five providers are separately released in the coordinated `0.2.3` package set. |
 | Version and release | All six distributions use one annotated `vX.Y.Z` Git tag and one `release.yml` workflow. Versions come from `hatch-vcs`; release builds pin every cross-project requirement to that tag. | No per-distribution version fields or tags. CI verifies all 12 artifact versions and exact pins, then publishes core followed by providers. The tag selects the version; automation synchronizes it. |
 | Configuration entry points | `ConfigManager` provides file loading and immutable mapping snapshots; Pydantic Settings source adapters provide typed model integration over the same loader. | Consumers can choose a direct mapping API or Pydantic model validation without maintaining two file-parsing implementations. |
 | Configuration lifecycle | Parse and resolve sources when constructing or explicitly reloading; publish a new immutable `ConfigSnapshot` only after a successful load. | Repeated reads use prepared data. A failed reload must leave the last published snapshot intact. |
@@ -82,23 +82,22 @@ flowchart TD
 services --> models
 ```
 
-## Distribution inventory and release plan
+## Distribution inventory and release model
 
-The following names define the intended PyPI projects and Python import
-ownership. `standard` is the existing project. The five add-on source projects
-are implemented in this repository but have not yet been published or reserved
-on PyPI.
+The following six projects are the published package set at version `0.2.3`.
+Each add-on owns one `std.<integration>` namespace; the core package owns
+shared modules, CLI, and agent skill.
 
 | PyPI project | Purpose and owned imports | Dependency boundary | State |
 | --- | --- | --- | --- |
-| `standard` | Core library, configuration, logging, utilities, `std` CLI, and packaged skill. | Base runtime dependencies only. Extras are convenience selectors for integrations. | Published as 0.1.1. Core and CLI remain here. |
-| `standard-fastapi` | FastAPI integration at `std.fastapi`. | Depends on the matching `standard` release and FastAPI. | Implemented in source; PyPI returned 404 on 2026-10-12; publisher setup is owner action. |
-| `standard-aws` | AWS integration at `std.aws`. | Depends on the matching `standard` release and aioboto3. | Implemented in source; PyPI returned 404 on 2026-10-12; publisher setup is owner action. |
-| `standard-http` | HTTP client and authentication helpers at `std.http`. | Depends on the matching `standard` release and HTTPX. | Implemented in source; PyPI returned 404 on 2026-10-12; publisher setup is owner action. |
-| `standard-cache` | Redis client, decorators, and locks at `std.cache`. | Depends on the matching `standard` release and Redis. | Implemented in source; PyPI returned 404 on 2026-10-12; publisher setup is owner action. |
-| `standard-rdbms` | Relational database helpers at `std.rdbms`. | Depends on the matching `standard` release and SQLAlchemy/drivers. | Implemented in source; PyPI returned 404 on 2026-10-12; publisher setup is owner action. |
+| `standard` | Core library, configuration, logging, utilities, `std` CLI, and packaged skill. | Base runtime dependencies only. Extras are convenience selectors for integrations. | Published at `0.2.3`; core and CLI stay here. |
+| `standard-fastapi` | FastAPI integration at `std.fastapi`. | Depends on the matching `standard` release and FastAPI. | Published at `0.2.3`. |
+| `standard-aws` | AWS integration at `std.aws`. | Depends on the matching `standard` release and aioboto3. | Published at `0.2.3`. |
+| `standard-http` | HTTP client and authentication helpers at `std.http`. | Depends on the matching `standard` release and HTTPX. | Published at `0.2.3`. |
+| `standard-cache` | Redis client, decorators, and locks at `std.cache`. | Depends on the matching `standard` release and Redis. | Published at `0.2.3`. |
+| `standard-rdbms` | Relational database helpers at `std.rdbms`. | Depends on the matching `standard` release and SQLAlchemy/drivers. | Published at `0.2.3`. |
 
-The target monorepo layout is:
+The source monorepo layout is:
 
 ```text
 pyproject.toml                         # standard core and std CLI
@@ -107,11 +106,11 @@ packages/standard-fastapi/pyproject.toml
 packages/standard-fastapi/src/std/fastapi/
 packages/standard-aws/pyproject.toml
 packages/standard-aws/src/std/aws/
-packages/standard-http/pyproject.toml   # after its API and dependency design
+packages/standard-http/pyproject.toml
 packages/standard-http/src/std/http/
-packages/standard-cache/pyproject.toml  # after its API and dependency design
+packages/standard-cache/pyproject.toml
 packages/standard-cache/src/std/cache/
-packages/standard-rdbms/pyproject.toml  # only after its API is designed
+packages/standard-rdbms/pyproject.toml
 packages/standard-rdbms/src/std/rdbms/
 ```
 
@@ -123,12 +122,12 @@ of the wheels before release.
 
 The core distribution's five extras select their corresponding add-on
 projects. Installing `standard` alone supplies only core modules; each
-integration can also be installed directly. The published `v0.1.1` release
-still bundles FastAPI and AWS. The next release uses one `vX.Y.Z` tag for all
-six projects. A single workflow builds every wheel and source archive, verifies
-their metadata, then publishes the core and providers in order. Release builds
-pin the extras and provider core dependencies to that exact tag version, so
-the convenience installs resolve one coordinated set.
+integration can also be installed directly. The earlier `v0.1.1` release
+bundled FastAPI and AWS in core; the current `0.2.3` package set uses the
+separate distribution model. One `vX.Y.Z` tag controls all six versions. A
+single workflow builds every wheel and source archive, verifies their
+metadata, then publishes core and providers in order. Release builds pin the
+extras and provider core dependencies to that exact tag version.
 
 Use `snake_case.py` for module and file names, `PascalCase` for classes, and
 `snake_case` for functions and variables. Keep modules cohesive and avoid
@@ -143,7 +142,7 @@ contains the full guidance for agents.
 | --- | --- |
 | Python support | CPython 3.11–3.14; project metadata requires Python 3.11 or newer. |
 | Base dependencies | PyYAML 6.x and pydantic-settings 2.x; TOML parsing uses the standard-library `tomllib`. |
-| Optional extras | In published 0.1.1, FastAPI and AWS modules are bundled with `standard`. In the next release, all five extras select separate distributions, and the release build pins each to the same tag version. |
+| Optional extras | In the current `0.2.3` package set, each of the five extras selects its separate integration distribution, and the release build pins each to the same tag version. |
 | Compatibility reference | Match documented and inspected behavior from `pydantic-settings-extra-sources` 0.1.0 where specified, while fixing the edge cases in the [configuration contract](../configuration/index.md). The reference package is test-only, not a runtime dependency. |
 | Pydantic source priority | By default: init kwargs, config files, process environment, dotenv, then file secrets. Callers may customize the order. |
 | Directory merge | Sort discovered files by normalized relative POSIX path; merge mappings recursively, append lists, and let later scalar or type conflicts replace earlier values. |
@@ -161,20 +160,16 @@ contains the full guidance for agents.
 | `Service` and `BackgroundService` contracts | Implemented in `std.service`: both use async lifecycle methods, `BackgroundService` extends `Service`, failed services remain cleanable, and worker failures are observable through state, `failure`, and `wait()`. | Revisit only when a concrete compatibility or operational gap is found. |
 | Background startup policy | The app template registers each injected service's stop callback before calling start, so partial startup is cleaned up and services stop in reverse order. Background workers have a bounded graceful wait followed by cancellation and a second bounded wait. | Revisit if an application needs a different startup or shutdown policy. |
 
-## Verified external setup
+## Current release and hosted project setup
 
-Status checked on 2026-10-12:
-
-- The [PyPI `standard` project](https://pypi.org/project/standard/) lists
-  maintainer `appunni-m` and release 0.1.1. Clean-environment install checks for
-  the base package and optional extras passed; this verifies those install
-  checks, not the unpublished repository version.
-- GitHub Pages is enabled and the site is live at
+- The latest coordinated package release is `0.2.3`; see the
+  [release guide](../publishing.md) for the six project names and install
+  extras.
+- GitHub Pages is configured to publish the site at
   [appunni-m.github.io/python-standard](https://appunni-m.github.io/python-standard/).
-- GitHub private vulnerability reporting is enabled through the repository's
+- GitHub private vulnerability reporting is available through the repository's
   [Security Advisories page](https://github.com/appunni-m/python-standard/security/advisories).
-- The annotated `v0.1.1` release workflow completed successfully and the GitHub
-  release is live. This verifies Trusted Publishing for `standard`. The shared
-  six-distribution workflow is configured in source; add-on publisher entries
-  and the coordinated OIDC path are not yet verified. See the
-  [publishing guide](../publishing.md).
+- The annotated-tag release workflow publishes all six distributions through
+  the configured `pypi` environment and Trusted Publishing. See the
+  [release workflow](https://github.com/appunni-m/python-standard/blob/main/.github/workflows/release.yml)
+  and [publishing guide](../publishing.md).

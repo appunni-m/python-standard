@@ -1,0 +1,49 @@
+[build-system]
+requires = ["hatchling>=1.27,<2"]
+build-backend = "hatchling.build"
+
+[project]
+name = "standard-fastapi-consumer-sample"
+version = "0.1.0"
+description = "An independently assembled FastAPI consumer sample for Standard"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "standard[fastapi]==0.2.3",
+  "uvicorn>=0.30,<1",
+]
+
+[project.optional-dependencies]
+dev = [
+  "httpx>=0.27,<1",
+  "mypy>=1.18,<2",
+  "pytest>=8.3,<10",
+  "ruff>=0.14,<1",
+]
+
+[project.scripts]
+consumer-api = "consumer_app.main:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/consumer_app"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "D1", "RUF100"]
+ignore = ["D105", "D107"]
+per-file-ignores = { "tests/**/*.py" = ["D100", "D103"] }
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+enable_error_code = ["ignore-without-code"]
+mypy_path = "src"
+packages = ["consumer_app"]

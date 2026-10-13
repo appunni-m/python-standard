@@ -1,8 +1,10 @@
 # Standard
 
-## Small Python utilities with predictable behavior
+## Build Python applications with clear module boundaries
 
-Standard is a Python utility library published as the `standard` distribution. It imports as `std` and provides the `std` command. The published 0.1.1 package includes YAML/TOML configuration, Pydantic Settings integration, collection and file helpers, FastAPI and AWS integrations, and coding-agent guidance. The unreleased source separates FastAPI, AWS, HTTP, cache, and RDBMS into add-on distributions and adds environment-aware logging. Every distribution now derives its version from the same `vX.Y.Z` Git tag.
+Standard is an alpha Python library for shared application infrastructure and agent guidance. Install the `standard` distribution, import it as `std`, and use the `std` command to discover supported APIs and install the packaged Python skill. The core provides configuration, logging, collections, file helpers, and async service lifecycles. FastAPI, AWS, HTTP, Redis cache, and relational database integrations are separate distributions selected with extras. All six distributions use one version from a shared release tag.
+
+The application pattern keeps settings, routes, schemas, data models, repositories, and services with their feature. `main.py` constructs settings and dependencies once, then injects them into the app and its lifecycle. The [FastAPI template](https://github.com/appunni-m/python-standard/tree/main/templates/fastapi-app) and [sample consumer](https://github.com/appunni-m/python-standard/tree/main/sample-projects/standard-fastapi-consumer) show the pattern in code.
 
 ### Choose a path
 
@@ -12,6 +14,7 @@ Standard is a Python utility library published as the `standard` distribution. I
 | Load YAML/TOML and configure Pydantic Settings | [Configuration reference](configuration/index.md) |
 | Configure application logs by environment | [Logging guide](logging.md) |
 | Find public helpers and integrations | [API reference](api.md) |
+| Inspect a consumer app installed from the published packages | [FastAPI consumer sample](https://github.com/appunni-m/python-standard/tree/main/sample-projects/standard-fastapi-consumer) and its [evaluation report](https://github.com/appunni-m/python-standard/blob/main/sample-projects/standard-fastapi-consumer/EVALUATION.md) |
 | Call HTTP services | [HTTP client guide](http.md) |
 | Cache data or coordinate work with Redis | [Cache and locks guide](cache.md) |
 | Manage async database sessions | [Relational database guide](rdbms.md) |
@@ -20,9 +23,11 @@ Standard is a Python utility library published as the `standard` distribution. I
 | Run tests or reproduce measurements | [Testing and benchmarks](testing.md) |
 | Read release changes | [Changelog](changelog.md) |
 | Contribute | [Contributing](contributing.md) |
+| Report a bug or ask for help | [GitHub Issues](https://github.com/appunni-m/python-standard/issues) |
+| Report a security issue | [Security policy](https://github.com/appunni-m/python-standard/blob/main/SECURITY.md) |
 
-### Current release status
+### Current release
 
-As of 2026-10-12, PyPI and GitHub have the `standard` 0.1.1 release. Its [release workflow](https://github.com/appunni-m/python-standard/actions/runs/38249688229) completed using Trusted Publishing, and hosted [CI run 38226724973](https://github.com/appunni-m/python-standard/actions/runs/38226724973) and [documentation run 38226724951](https://github.com/appunni-m/python-standard/actions/runs/38226724951) passed on `ef584957`. The next planned release is `v0.2.0`; one tag will build and publish all six distributions at that version. The add-on projects still need PyPI publisher setup, and no `v0.2.0` release has been created. The docs site is live at [appunni-m.github.io/python-standard](https://appunni-m.github.io/python-standard/). Benchmark records are exploratory and do not claim the 100× aspiration.
+The latest coordinated release is `v0.2.3`. It includes `standard` and five provider distributions at the same version. Installing `standard` alone gives you the core modules; install an extra such as `standard[fastapi]` to add an integration. See [publishing](publishing.md) for package links and the tag-based release process. The documentation site is published through [GitHub Pages](https://appunni-m.github.io/python-standard/). Configuration benchmark records are exploratory and do not demonstrate the 100× target.
 
 Keep configuration errors and source precedence explicit, keep optional integrations out of the core install, and measure equivalent work before making performance claims.

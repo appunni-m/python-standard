@@ -23,7 +23,22 @@ The package metadata keeps each runtime integration independent. The Testcontain
 | `standard[rdbms]` | `-e . -e packages/standard-rdbms` | `standard-rdbms`, SQLAlchemy, and async drivers |
 | `standard[fastapi,aws,http,cache,rdbms]` | Core plus all five local add-on projects | All add-on distributions and their dependencies |
 
-The published [`standard` project](https://pypi.org/project/standard/) is at version 0.1.1. On 2026-10-12, fresh CPython 3.12 virtual environments installed the base package, each existing extra, and both extras from PyPI; imports for `std`, `std.fastapi`, and `std.aws` passed. The combined environment also passed `pip check` and the `std` CLI/skill commands. This verifies the published 0.1.1 artifact, where FastAPI and AWS are bundled. The unreleased source now derives all six project versions from one shared Git tag; the add-on distributions have not been published.
+The latest coordinated release is `v0.2.3`; all six distributions use version
+`0.2.3`. The repository's Testcontainers suite validates built wheels and
+clean consumer installs from the current source. The independent example in
+[`sample-projects/standard-fastapi-consumer`](https://github.com/appunni-m/python-standard/tree/main/sample-projects/standard-fastapi-consumer)
+adds an application-level check of the public API and project conventions.
+These checks establish only the behaviors and environments they exercise; they
+do not prove every possible application setup.
+
+On 2026-10-13, I downloaded the six published `0.2.3` wheels and installed
+them into isolated CPython 3.12 virtual environments. Core-only, each single
+extra, and all extras together passed `pip check`. Core-only did not expose
+provider namespaces; each single extra exposed only its selected namespace;
+the combined install exposed all five. `std --version` reported `std 0.2.3`,
+and `std guide --format json` returned schema version `1`. This smoke check
+covers package metadata, imports, and CLI startup, not external service
+behavior; the Testcontainers suite covers service-backed scenarios.
 
 ## Layers
 
@@ -52,7 +67,22 @@ tox run -e e2e
 
 ## Verification status and release gates
 
-As of 2026-10-12, hosted [CI run 38226724973](https://github.com/appunni-m/python-standard/actions/runs/38226724973) passed the quality job, the Testcontainers consumer job, and the CPython 3.11–3.14 matrix on main commit `ef584957`. The standard `v0.1.1` release workflow completed successfully in [run 38249688229](https://github.com/appunni-m/python-standard/actions/runs/38249688229), verifying the OIDC publisher for `standard`. The new provider workflows are present in this working tree but have not run; their PyPI projects and publishers are not verified. The documentation site built and deployed in [run 38226724951](https://github.com/appunni-m/python-standard/actions/runs/38226724951). Hosted results predate the current source edits.
+On 2026-10-13, `make check` passed on Linux with CPython 3.12.11: 248 tests
+passed, 11 E2E tests were deselected, coverage was 94%, and Ruff, strict mypy,
+and the clean docs build passed. Tox skipped CPython 3.11, 3.13, and 3.14
+because those interpreters were not installed locally. `make test-e2e` then
+passed all 11 Testcontainers cases in 109.95 seconds. These results apply to
+the current checkout and environment; they do not claim cross-platform or
+all-interpreter coverage.
+
+CI is configured for CPython 3.11–3.14, lint, strict typing, documentation
+build, and Testcontainers end-to-end checks. The release workflow requires a
+successful `main` CI run for the exact tagged commit before it publishes all
+six distributions. For hosted evidence tied to a specific revision, inspect
+the [CI workflow runs](https://github.com/appunni-m/python-standard/actions/workflows/ci.yml)
+and [release workflow runs](https://github.com/appunni-m/python-standard/actions/workflows/release.yml).
+Workflow configuration describes intended checks; a passing run is the
+evidence for a particular commit.
 
 The configured release checks cover:
 

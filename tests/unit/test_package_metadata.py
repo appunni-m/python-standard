@@ -60,7 +60,11 @@ def test_core_distribution_owns_only_core_modules_and_selects_addons() -> None:
     }
     skill_path = root / "src/std/skills/standard-idiomatic-python/SKILL.md"
     assert skill_path.is_file()
-    assert "name: standard-idiomatic-python" in skill_path.read_text(encoding="utf-8")
+    skill = skill_path.read_text(encoding="utf-8")
+    assert "name: standard-idiomatic-python" in skill
+    assert "Use `std.service.Service`" in skill
+    assert "Use `std.service.BackgroundService`" in skill
+    assert "unreleased source" not in skill.lower()
 
     sdist = metadata["tool"]["hatch"]["build"]["targets"]["sdist"]
     assert set(sdist["only-include"]) == {

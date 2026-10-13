@@ -3,10 +3,8 @@
 Redis caching helpers and distributed locks for the `standard` Python library.
 The package name is `standard-cache`; Python imports are under `std.cache`.
 
-The source package is built and tested. PyPI availability and publisher setup
-for the add-on have not yet been verified.
-
-After the first PyPI release, install it with:
+Install the provider directly or select it through the `standard[cache]`
+extra. It shares the core distribution's release version:
 
 ```console
 python -m pip install standard-cache

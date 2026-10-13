@@ -1,0 +1,21 @@
+application:
+  name: ${APP_NAME:-standard-order-api}
+  environment: ${APP_ENV:-development}
+  host: ${APP_HOST:-127.0.0.1}
+  port: ${APP_PORT:-8000}
+  debug: ${APP_DEBUG:-false}
+
+logging:
+  level: ${LOG_LEVEL:-null}
+  format: ${LOG_FORMAT:-auto}
+  stream: ${LOG_STREAM:-stdout}
+  color: ${LOG_COLOR:-auto}
+  include_source: ${LOG_INCLUDE_SOURCE:-false}
+  date_format: ${LOG_DATE_FORMAT:-null}
+  custom_format: ${LOG_CUSTOM_FORMAT:-null}
+  custom_style: ${LOG_CUSTOM_STYLE:-%}
+  logger_levels: {}
+
+orders:
+  currency: ${ORDERS_CURRENCY:-USD}
+  maximum_amount_cents: ${ORDERS_MAXIMUM_AMOUNT_CENTS:-250000}

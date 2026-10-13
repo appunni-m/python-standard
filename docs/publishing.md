@@ -9,13 +9,32 @@ make docs-build
 
 The generated site is written to `site/` and is excluded from Git.
 
+## Current release status
+
+The latest coordinated release is `v0.2.3`. It publishes the core package and
+all five integration distributions at version `0.2.3` from one annotated tag.
+The release workflow uses PyPI Trusted Publishing and creates one GitHub
+release containing the distributions and checksum manifest.
+
+| PyPI project | Import namespace | Install selection |
+| --- | --- | --- |
+| [`standard`](https://pypi.org/project/standard/) | `std` | `standard` |
+| [`standard-fastapi`](https://pypi.org/project/standard-fastapi/) | `std.fastapi` | `standard[fastapi]` or `standard-fastapi` |
+| [`standard-aws`](https://pypi.org/project/standard-aws/) | `std.aws` | `standard[aws]` or `standard-aws` |
+| [`standard-http`](https://pypi.org/project/standard-http/) | `std.http` | `standard[http]` or `standard-http` |
+| [`standard-cache`](https://pypi.org/project/standard-cache/) | `std.cache` | `standard[cache]` or `standard-cache` |
+| [`standard-rdbms`](https://pypi.org/project/standard-rdbms/) | `std.rdbms` | `standard[rdbms]` or `standard-rdbms` |
+
+Installing `standard` alone installs core only. Each extra selects its matching
+provider; there is no separate `standard-core` or `standard-cli` project.
+
 ## GitHub Pages deployment
 
 The repository includes `.github/workflows/docs.yml`. It builds the docs with the pinned documentation dependencies and publishes them on pushes to `main` or a manual workflow run.
 
 ### Verified deployment
 
-The first deployment succeeded in [Documentation run #4](https://github.com/appunni-m/python-standard/actions/runs/38199791257) for commit `41f0b4a` on 2026-10-12. The latest verified deployment at the time of this edit is [run 38226724951](https://github.com/appunni-m/python-standard/actions/runs/38226724951) for main commit `ef584957`. The site is live at [appunni-m.github.io/python-standard](https://appunni-m.github.io/python-standard/). Each push to `main` builds `site/`, uploads it as a Pages artifact, and deploys it to the `github-pages` environment. To deploy manually, open **Actions → Documentation** and choose **Run workflow**.
+An earlier deployment succeeded in [run 38226724951](https://github.com/appunni-m/python-standard/actions/runs/38226724951). The site is published at [appunni-m.github.io/python-standard](https://appunni-m.github.io/python-standard/). Each push to `main` builds `site/`, uploads it as a Pages artifact, and deploys it to the `github-pages` environment. To deploy manually, open **Actions → Documentation** and choose **Run workflow**.
 
 The workflow grants only `contents: read`, `pages: write`, and `id-token: write`, and uses GitHub's recommended Pages actions. See [GitHub's publishing-source guide](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site), [GitHub's custom-workflow requirements](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages), and [Zensical's GitHub Pages guide](https://zensical.org/docs/publish-your-site/).
 
@@ -23,13 +42,16 @@ The live Pages URL, `https://appunni-m.github.io/python-standard/`, matches `sit
 
 ## Published distribution
 
-The [PyPI `standard` project](https://pypi.org/project/standard/) has release `0.1.1`. The annotated `v0.1.1` tag was published through this repository's release workflow, run [38249688229](https://github.com/appunni-m/python-standard/actions/runs/38249688229), which completed successfully. The [GitHub release](https://github.com/appunni-m/python-standard/releases/tag/v0.1.1) is live. The published wheel and source archive declare the `fastapi` and `aws` extras and include the corresponding `std` modules.
-
-This describes the published `0.1.1` artifact. The working tree may contain later local documentation and logging changes; those are not part of `0.1.1` unless released under a later version.
+The coordinated `v0.2.3` release includes the standalone integration packages.
+The earlier `0.1.1` artifact bundled FastAPI and AWS in the core package; use
+the current extras or direct provider package names above for new installs.
 
 ## Configure PyPI Trusted Publishing
 
-The release workflow is present at `.github/workflows/release.yml`. It uses PyPI Trusted Publishing through GitHub's OIDC identity, so the publishing job does not need a long-lived `PYPI_TOKEN` secret. The successful `v0.1.1` run verifies the current publisher path for the existing `standard` project.
+The release workflow at `.github/workflows/release.yml` uses PyPI Trusted
+Publishing through GitHub's OIDC identity. It does not need a long-lived
+`PYPI_TOKEN` secret. The shared `v0.2.3` release uses the publisher identity
+below for each of the six projects.
 
 ### Publisher fields
 
@@ -46,7 +68,9 @@ For the existing `standard` project, configure a GitHub Actions publisher whose 
 
 PyPI matches the owner, repository, workflow filename, and optional environment against the GitHub Actions identity. The publisher form asks for the workflow filename, not the `.github/workflows/` path. See PyPI's [publisher setup guide](https://docs.pypi.org/trusted-publishers/adding-a-publisher/).
 
-The `standard` project already exists and lists `appunni-m` as its maintainer. Its publisher is verified by the successful `v0.1.1` release. Do not create a pending publisher for this existing project.
+These values are a reference for maintaining the configured publishers. Do not
+create duplicate pending publishers; each project has already participated in
+the coordinated release.
 
 ## Distribution projects
 
@@ -55,17 +79,15 @@ ownership are:
 
 | PyPI project | Python import | Contents | Publisher status |
 | --- | --- | --- | --- |
-| `standard` | `std` | Core utilities, configuration, logging, CLI, and skill. | Existing publisher; verified by release `v0.1.1`. |
-| `standard-fastapi` | `std.fastapi` | FastAPI integration. | Source project exists; PyPI returned 404 on 2026-10-12; publisher setup is owner action. |
-| `standard-aws` | `std.aws` | AWS integration. | Source project exists; PyPI returned 404 on 2026-10-12; publisher setup is owner action. |
-| `standard-http` | `std.http` | HTTP client and authentication helpers. | Source project exists; PyPI returned 404 on 2026-10-12; publisher setup is owner action. |
-| `standard-cache` | `std.cache` | Redis client, caching decorators, and locks. | Source project exists; PyPI returned 404 on 2026-10-12; publisher setup is owner action. |
-| `standard-rdbms` | `std.rdbms` | Relational database configuration and session helpers. | Source project exists; PyPI returned 404 on 2026-10-12; publisher setup is owner action. |
+| `standard` | `std` | Core utilities, configuration, logging, CLI, and skill. | Published at `0.2.3`. |
+| `standard-fastapi` | `std.fastapi` | FastAPI integration. | Published at `0.2.3`. |
+| `standard-aws` | `std.aws` | AWS integration. | Published at `0.2.3`. |
+| `standard-http` | `std.http` | HTTP client and authentication helpers. | Published at `0.2.3`. |
+| `standard-cache` | `std.cache` | Redis client, caching decorators, and locks. | Published at `0.2.3`. |
+| `standard-rdbms` | `std.rdbms` | Relational database configuration and session helpers. | Published at `0.2.3`. |
 
-The exact [PyPI JSON endpoint for `standard`](https://pypi.org/pypi/standard/json)
-returned HTTP 200 on 2026-10-12. The endpoints for the five add-on names above
-returned HTTP 404 that day. This is an availability snapshot, not a reservation;
-check again immediately before publisher setup and release.
+The five providers are optional runtime dependencies. Installing core does not
+install or import them unless an application selects the relevant extra.
 
 The core project's extras are convenience selectors: `standard[fastapi]`
 installs `standard-fastapi`, `standard[aws]` installs `standard-aws`,
@@ -75,9 +97,8 @@ release, the build workflow pins every extra and add-on dependency to that
 release's exact shared version. There is no separate `standard-core` or
 `standard-cli` project.
 
-For each add-on project, use a PyPI **pending publisher** under the owner's
-account. All six projects use the same publisher identity because a single
-tag-based workflow publishes the complete release:
+All six projects use the same publisher identity because one tag-based
+workflow publishes the complete release:
 
 | PyPI project | Workflow filename | Publisher | Owner | Repository | GitHub environment |
 | --- | --- | --- | --- | --- | --- |
@@ -87,15 +108,11 @@ tag-based workflow publishes the complete release:
 | `standard-cache` | `release.yml` | GitHub Actions | `appunni-m` | `python-standard` | `pypi` |
 | `standard-rdbms` | `release.yml` | GitHub Actions | `appunni-m` | `python-standard` | `pypi` |
 
-Add one pending publisher for each new project under the PyPI account's
-**Publishing** page. PyPI converts it to a normal publisher on first successful
-publication. A pending publisher does **not** reserve the project name; verify
-availability immediately before configuring and publishing it. If a pending
-publisher was registered with an older workflow filename, update or recreate
-it with `release.yml` before the first upload. See PyPI's
-[project creation with a pending publisher](https://docs.pypi.org/trusted-publishers/creating-a-project-through-oidc/)
-and [publisher setup guide](https://docs.pypi.org/trusted-publishers/adding-a-publisher/),
-plus PyPI's [Trusted Publisher security model](https://docs.pypi.org/trusted-publishers/security-model/).
+If a new distribution is added later, configure its publisher on PyPI before
+publishing. A pending publisher does not reserve a project name. See PyPI's
+[pending publisher guide](https://docs.pypi.org/trusted-publishers/creating-a-project-through-oidc/),
+[publisher setup guide](https://docs.pypi.org/trusted-publishers/adding-a-publisher/),
+and [Trusted Publisher security model](https://docs.pypi.org/trusted-publishers/security-model/).
 
 All six distributions share one version source and one tag. `hatch-vcs` reads
 the same `vX.Y.Z` Git tag from each project directory, and the release script
@@ -118,15 +135,14 @@ environment. Before building, it pins each core extra and each provider's core
 dependency to the tag version. This keeps `standard[fastapi]` and the other
 extras on the matching release, including future patch or minor releases. The
 core wheel has an explicit allow-list, and each add-on wheel owns only its
-`std.<integration>` subtree. This change does not create a tag or publish files.
+`std.<integration>` subtree.
 
 ### GitHub environment setup
 
-The `pypi` environment is configured and was used successfully by the
-`v0.1.1` release. All six projects must have a Trusted Publisher for
-`release.yml` and the `pypi` environment before their first coordinated
-release. If repository protection rules or the environment name change, update
-the publisher entries to match.
+The `pypi` environment is configured and was used for the coordinated
+`v0.2.3` release. Each of the six projects must retain a Trusted Publisher for
+`release.yml` and the `pypi` environment. If repository protection rules or
+the environment name change, update the publisher entries to match.
 
 ### Version-tag release flow
 
@@ -158,8 +174,8 @@ git push origin vX.Y.Z
 
 Replace `X.Y.Z` with the single version for the complete release. The annotated tag must point at the commit whose `main` CI passed. The pushed tag starts the workflow; monitor **Release** in GitHub Actions and verify all six PyPI project versions and the GitHub release. Treat release tags as immutable: publish a correction with the next version.
 
-Before the first coordinated release, verify the five project names and
-configure each PyPI pending publisher with `release.yml` and `pypi` as shown
-above. GitHub environment settings require a repository owner or administrator;
-PyPI publisher setup requires control of the account. The add-on projects do
-not yet have published releases.
+Before a future release, merge the release-ready commit to `main`, wait for
+that commit's CI and Testcontainers jobs to pass, and then push one annotated
+tag. GitHub and PyPI settings require the corresponding repository and account
+access; do not change publisher fields without coordinating the matching
+configuration on both services.

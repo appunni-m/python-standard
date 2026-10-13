@@ -1,8 +1,8 @@
 # Standard
 
-**A small Python utility library with predictable behavior and agent-first guidance.**
+**A modular Python utility library with predictable behavior and agent-first guidance.**
 
-The project and PyPI distribution are named `standard`; the Python import package and command are named `std`. Standard is an alpha Python library published on [PyPI](https://pypi.org/project/standard/). Read the [documentation site](https://appunni-m.github.io/python-standard/) for the full user guide and API reference.
+The project and PyPI distribution are named `standard`; the Python import package and command are named `std`. Install core by itself or add FastAPI, AWS, HTTP, Redis cache, or relational database support through an extra. All six distributions share one release version; see the [publishing guide](docs/publishing.md) for the current release. Standard is an alpha library; the [documentation site](https://appunni-m.github.io/python-standard/) has the guides, API contracts, examples, and release instructions.
 
 ## Documentation map
 
@@ -17,7 +17,8 @@ The project and PyPI distribution are named `standard`; the Python import packag
 - [Testing and benchmarks](docs/testing.md) — local checks, Testcontainers, parity, and measurement limits.
 - [Changelog](docs/changelog.md) — user-visible changes by release.
 - [FastAPI app template](templates/fastapi-app/README.md) — a copyable, feature-first layout with co-located module code, YAML settings, startup injection, and lifecycle wiring.
-- [Contributing](CONTRIBUTING.md) · [Security policy](SECURITY.md) · [MIT license](LICENSE).
+- [FastAPI consumer sample](sample-projects/standard-fastapi-consumer/README.md) — an independently assembled app installed from the published package, with a fresh-agent evaluation report.
+- [Contributing](CONTRIBUTING.md) · [Support](SUPPORT.md) · [Security policy](SECURITY.md) · [MIT license](LICENSE).
 
 ## Install from PyPI
 
@@ -31,7 +32,7 @@ python -m pip install 'standard[rdbms]'
 python -m pip install 'standard[fastapi,aws,http,cache,rdbms]'
 ```
 
-The core provides YAML/TOML configuration, Pydantic Settings sources, immutable snapshots, recursive mapping helpers, atomic text writes, environment-aware logging, async service lifecycle management, and the `std` CLI. FastAPI, AWS, HTTP, cache, and RDBMS are separate integration distributions. The published `standard` 0.1.1 still bundles FastAPI and AWS; the unreleased source splits all integrations and will publish them together at one version from a shared `vX.Y.Z` tag. The extras shown above become installable from PyPI after that coordinated release.
+The core provides YAML/TOML configuration, Pydantic Settings sources, immutable snapshots, recursive mapping helpers, atomic text writes, environment-aware logging, async service lifecycle management, and the `std` CLI. FastAPI, AWS, HTTP, cache, and RDBMS are separately installable distributions. The `standard[fastapi]`, `standard[aws]`, `standard[http]`, `standard[cache]`, and `standard[rdbms]` extras select those providers. All six distributions share the same release version; see the [publishing guide](docs/publishing.md) for the current status and tag workflow.
 
 ## Install from this checkout
 
@@ -47,7 +48,7 @@ Run these commands from the repository root. The integration source projects are
 | Relational databases | `python -m pip install -e . -e packages/standard-rdbms` | `std.rdbms` |
 | All providers | `python -m pip install -e . -e packages/standard-fastapi -e packages/standard-aws -e packages/standard-http -e packages/standard-cache -e packages/standard-rdbms` | All provider modules |
 
-The source tree's `standard[fastapi]`, `standard[aws]`, `standard[http]`, `standard[cache]`, and `standard[rdbms]` extras select those standalone distributions. They become installable from PyPI after the matching projects are published; see the [publishing guide](docs/publishing.md).
+The editable installs above are for developing this checkout. For an application, install the released package and only the integration extras it uses; core does not import or install optional providers by default.
 
 ## First use
 
@@ -115,3 +116,6 @@ std skill install
 `std guide` summarizes the supported library surface for coding agents. `std guide --format json` emits schema-versioned install, module, command, and documentation data. `std skill show` prints the packaged idiomatic-Python skill. `std skill install` writes it to `.agents/skills/standard-idiomatic-python/SKILL.md` and refuses to overwrite an existing file unless you pass `--force`.
 
 The source repository contains the development checks, end-to-end tests, and full documentation site. The published distribution is intended to contain only the working library, its CLI, and the required package metadata, README, and license.
+
+For usage questions, bug reports, and feature requests, see [Support](SUPPORT.md).
+Report security issues privately using the process in [SECURITY.md](SECURITY.md).

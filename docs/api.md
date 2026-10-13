@@ -17,12 +17,12 @@
 | `std.cache` | `standard-cache` or `standard[cache]` | Redis client, sync/async cache decorators, and distributed locks |
 | `std.rdbms` | `standard-rdbms` or `standard[rdbms]` | Async SQLAlchemy database managers for SQLite, PostgreSQL, and MySQL |
 
-The published `standard` 0.1.1 bundles the FastAPI and AWS modules. The
-unreleased source gives each integration its own distribution; the add-ons and
-their convenience extras are not published yet. From a checkout,
+The current coordinated release is `0.2.3`; each integration has its own
+distribution and matching convenience extra. Install `standard` for core APIs,
+then select only the provider packages your application uses. From a checkout,
 install core plus the relevant `packages/standard-*` project in editable mode.
-See [current release status](index.md#current-release-status) and
-[publishing](publishing.md) for release status. The focused guides cover
+See [current release status](index.md#current-release) and
+[publishing](publishing.md) for distribution links and release details. The focused guides cover
 [HTTP](http.md), [Redis cache](cache.md), and
 [relational databases](rdbms.md).
 
@@ -149,33 +149,44 @@ asyncio.run(main())
 
 ### FastAPI
 
-Install `standard-fastapi` directly, or the `standard[fastapi]` convenience extra after that add-on is published. From a source checkout, install `packages/standard-fastapi` in editable mode.
+Install `standard-fastapi` directly or with the `standard[fastapi]` extra. From a source checkout, install `packages/standard-fastapi` in editable mode.
 
 In `main.py`, construct that settings model once and inject it into the FastAPI application:
 
 ```python
-from fastapi import Depends, FastAPI
+from typing import Annotated
+
+from fastapi import FastAPI
 from app.core.settings import Settings
 from std.fastapi import settings_dependency
 
 
 def create_app() -> FastAPI:
-    settings = Settings()  # Construct once in this application composition root.
+    # main.py is the composition root; construct and validate settings once.
+    settings = Settings()
     app = FastAPI()
     app.state.settings = settings
     settings_dep = settings_dependency(Settings)
 
     @app.get("/health")
-    async def health(settings: Settings = Depends(settings_dep)) -> dict[str, str]:
+    async def health(settings: Annotated[Settings, settings_dep]) -> dict[str, str]:
         return {"service": settings.service_name}
 
     return app
 ```
 
+Call `create_app()` once when loading the application. Keep all `Settings()`
+construction in `main.py`; route modules and dependencies receive the
+validated instance rather than constructing another one. The
+[sample consumer](https://github.com/appunni-m/python-standard/tree/main/sample-projects/standard-fastapi-consumer)
+exercises this startup flow end to end.
+
 `settings_dependency(settings_type)` requires a `BaseSettings` subclass and
-returns a FastAPI dependency that retrieves the matching instance from
-`request.app.state.settings`. Construct settings once in `main.py` and store
-that instance before serving requests; the dependency never constructs or
+returns a FastAPI `Depends` object that retrieves the matching instance from
+`request.app.state.settings`. Add that object directly as `Annotated` metadata;
+do not wrap it in another `Depends(...)`. Construct settings and the dependency
+in `main.py`, store the settings instance before serving requests, and pass the
+dependency into feature routers as needed. The helper never constructs or
 reloads settings. An absent or wrong-typed value returns HTTP 500 with a
 configuration message. Use `app.dependency_overrides` when tests need a
 replacement.
@@ -186,6 +197,12 @@ CORS policy. `FastAPISetup(api_config, log_config=None, setup_handler=None,
 CORS, and wires a `LifecycleManager` into the ASGI lifespan. The `host`,
 `port`, `workers`, `reload`, and `enabled` fields are available to the server
 entry point; the setup helper does not launch Uvicorn.
+
+`APIConfig.env` accepts `dev`, `stage`, or `prod`. `std.logging` also has a
+`test` profile. In tests, pass `LoggingEnvironment.TEST` to
+`configure_logging()` to keep warning-level console output, and map `test` to
+`Environment.DEV` when building `APIConfig`; the FastAPI environment enum does
+not accept `test`.
 
 `LifecycleManager` starts injected services in order and stops them in reverse
 order. It calls cleanup for the service whose startup failed, continues
@@ -216,7 +233,7 @@ is a small base for registering one route group on an injected FastAPI app.
 
 ### AWS Secrets Manager
 
-Install `standard-aws` directly, or the `standard[aws]` convenience extra after that add-on is published:
+Install `standard-aws` directly or with the `standard[aws]` convenience extra:
 
 ```python
 from std.aws import load_secret

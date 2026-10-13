@@ -6,15 +6,17 @@ in one small API.
 
 ## Install
 
-From this repository, install the core and HTTP projects together:
+For an application, install the HTTP integration through its extra or directly:
 
-```shell
-python -m pip install . packages/standard-http
+```console
+python -m pip install 'standard[http]'
+# or
+python -m pip install standard-http
 ```
 
-The core project defines a `standard[http]` convenience extra. It becomes
-available from PyPI after both the updated core distribution and this provider
-have been published. The `standard-http` distribution owns only `std.http`.
+For development from this repository, install the core and HTTP projects
+together with `python -m pip install -e . -e packages/standard-http`. The
+provider distribution owns only `std.http`.
 
 ## Make a request
 

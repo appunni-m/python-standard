@@ -10,8 +10,8 @@ From this repository, install the core and HTTP projects together:
 python -m pip install . packages/standard-http
 ```
 
-After the add-on is published, install the distributions with
-`python -m pip install standard standard-http`.
+For an application, install the provider with
+`python -m pip install 'standard[http]'` or install `standard-http` directly.
 
 ```python
 from std.http import AuthConfig, BearerAuth, HttpClient, RetryConfig

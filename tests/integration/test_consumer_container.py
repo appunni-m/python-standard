@@ -80,6 +80,12 @@ provider_distributions = {
 for extra in selected_extras:
     assert version(provider_distributions[extra]) == version('standard')
 assert files('std').joinpath('py.typed').is_file()
+skill = files('std').joinpath(
+    'skills/standard-idiomatic-python/SKILL.md'
+).read_text(encoding='utf-8')
+assert 'Use `std.service.Service`' in skill
+assert 'Use `std.service.BackgroundService`' in skill
+assert 'unreleased source' not in skill.lower()
 snapshot = ConfigManager.from_file('/config').snapshot
 class Settings(YamlSettings):
     std_config_file = '/config/settings.yaml'

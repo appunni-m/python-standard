@@ -5,10 +5,12 @@ Python library. The package provides `DatabaseConfig`, managed async sessions,
 SQLite, PostgreSQL, MySQL, and the `ensure_utc` property decorator under
 `std.rdbms`.
 
-After publication, install the integration directly:
+Install the integration directly or select it with the `standard[rdbms]`
+extra. It shares the core distribution's release version:
 
 ```console
 python -m pip install standard-rdbms
+python -m pip install 'standard[rdbms]'
 ```
 
 For local development from this repository:

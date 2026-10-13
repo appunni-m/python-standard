@@ -14,9 +14,9 @@ python -m pip install 'standard[rdbms]'
 python -m pip install 'standard[fastapi,aws,http,cache,rdbms]'
 ```
 
-These provider extras are part of the unreleased shared `v0.2.0` release train.
-The published `standard` 0.1.1 does not yet include them; use the local package
-install commands below until all six matching distributions are published.
+The current coordinated release is `0.2.3`. The core distribution does not
+install optional integration packages unless you select an extra. You can also
+install one provider directly with `python -m pip install standard-fastapi`.
 
 ## Install from this checkout
 
@@ -39,7 +39,9 @@ On Windows, activate the environment with `.venv\Scripts\activate` instead. Inst
 | Relational databases | `python -m pip install -e . -e packages/standard-rdbms` |
 | All providers | `python -m pip install -e . -e packages/standard-fastapi -e packages/standard-aws -e packages/standard-http -e packages/standard-cache -e packages/standard-rdbms` |
 
-These commands install this checkout in editable mode. The published `standard` 0.1.1 still bundles the FastAPI and AWS modules. The next coordinated `v0.2.0` release gives each integration its own distribution; it has not been published yet.
+These commands install this checkout in editable mode. Use them when changing
+Standard itself; application projects should normally install the published
+distribution and the extras they use.
 
 ## Load a configuration file
 
@@ -133,6 +135,11 @@ std skill install
 
 The skill install command writes `.agents/skills/standard-idiomatic-python/SKILL.md` by default. The directory name matches the skill's required Agent Skills metadata. The command refuses to replace an existing file; pass `--force` to replace it or give another destination path. See the [CLI reference](api.md#agent-cli).
 
+**Known issue in the published `0.2.3` package:** its installed skill contains
+one stale sentence that describes `std.service` as unreleased, although
+`std guide` correctly lists `std.service` as part of core. The source skill in
+this repository is corrected; the PyPI copy will update with a future release.
+
 ## Current status
 
 | Area | Status |
@@ -142,11 +149,13 @@ The skill install command writes `.agents/skills/standard-idiomatic-python/SKILL
 | Python versions | CPython 3.11–3.14 are declared and configured in tox and CI |
 | Test and benchmark commands | Unit, parity, Testcontainers consumer, and benchmark workflows are configured; see [testing](testing.md) for local evidence and environment limits |
 | Documentation site | Zensical source and a GitHub Pages workflow are configured |
-| PyPI | `standard` 0.1.1 is published and its old extras passed clean-environment checks; the next shared `v0.2.0` release and add-ons are not published yet |
+| PyPI | The current coordinated release is `0.2.3`; all six distributions share that version. |
 | Hosted docs | Live at [appunni-m.github.io/python-standard](https://appunni-m.github.io/python-standard/); pushes to `main` deploy updates |
 | Security reporting | GitHub private vulnerability reporting is enabled; use the **Report a vulnerability** button on the [Security Advisories page](https://github.com/appunni-m/python-standard/security/advisories) |
 
-As of 2026-10-12, PyPI serves `standard` 0.1.1, and its annotated tag and GitHub Release completed successfully. The next planned deployment is one `v0.2.0` tag covering all six distributions; the five add-on publishers still need owner setup. See the [publishing guide](publishing.md) for the shared workflow identity and tag process.
+The repository's [publishing guide](publishing.md) lists all six distributions,
+their import paths, and the shared tag release process. The [testing guide](testing.md)
+distinguishes source-tree checks from consumer and release-artifact checks.
 
 ## Read the docs
 

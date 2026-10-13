@@ -95,13 +95,16 @@ bounded graceful-shutdown period.
 
 Core provides configuration, `std.logging`, async `Service` lifecycle
 primitives, utility helpers, the `std` CLI, and packaged agent guidance. The
-`std.service` API is part of the unreleased source; check
-`std guide --format json` and the API reference to confirm what an installed
-release provides.
+FastAPI, AWS, HTTP, Redis cache, and relational database support are installed
+from their matching extras or provider distributions. All six distributions
+share one version derived from the release tag. Run `std guide --format json`
+and consult the API reference to see the installed version's supported
+modules and install paths.
 
 ## Python style
 
-- Target the project's declared Python floor. Standard supports Python 3.11 and newer.
+- Target the application's declared Python floor. Standard currently configures
+  and tests CPython 3.11 through 3.14; do not infer support beyond that matrix.
 - Prefer small functions, explicit names, standard-library types, and straightforward control flow.
 - Add parameter and return annotations to public functions. Use `collections.abc` protocols for inputs when they describe the real contract.
 - Use immutable values for shared configuration. Avoid mutable defaults; use `None` or a factory.

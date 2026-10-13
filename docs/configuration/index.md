@@ -99,4 +99,12 @@ The exact 0.1.0 release is used as a pinned test and benchmark oracle through th
 
 ## Design exit criteria
 
-The configuration API and runtime policy are defined. Unit tests cover the edge cases above, and live oracle tests compare ordinary YAML/TOML values, interpolation, YAML directory merging, and source precedence. The Testcontainers consumer scenario builds the core and all five add-on wheels, then installs the core alone, each integration extra, and all extras; it mounts YAML and TOML and exercises both Pydantic Settings adapters. The published 0.1.1 checks and hosted [CI run 38226724973](https://github.com/appunni-m/python-standard/actions/runs/38226724973) predate the current source and shared-tag release flow; rerun the container suite on the release commit before publishing.
+Unit tests cover the contract above, and live oracle tests compare ordinary
+YAML/TOML values, interpolation, YAML directory merging, and source precedence.
+The Testcontainers consumer scenario builds the core and five provider wheels,
+then installs core alone, each integration extra, and all extras; it mounts
+YAML and TOML and exercises both Pydantic Settings adapters. CI configuration
+also includes the supported Python matrix, strict typing, lint, and docs build.
+Check the [CI workflow runs](https://github.com/appunni-m/python-standard/actions/workflows/ci.yml)
+for results tied to a specific commit; the release workflow requires those
+checks to pass before publishing.
